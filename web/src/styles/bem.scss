@@ -1,0 +1,39 @@
+$namespace: 'am' !default;
+$block-sel: '-' !default;
+$element-sel: '__' !default;
+$modifier-sel: '--' !default;
+
+@mixin bfc {
+    height: 100%;
+    overflow: hidden;
+}
+
+@mixin flex {
+    display: flex;
+}
+
+@mixin b($block) {
+    $B: $namespace + $block-sel + $block;
+    .#{$B} {
+        // 差值语法 #{}
+        @content; // 内容替换
+    }
+}
+
+@mixin e($element) {
+    $selector: &;
+    @at-root {
+        #{$selector + $element-sel + $element} {
+            @content;
+        }
+    }
+}
+
+@mixin m($modifier) {
+    $selector: &;
+    @at-root {
+        #{$selector + $modifier-sel + $modifier} {
+            @content;
+        }
+    }
+}

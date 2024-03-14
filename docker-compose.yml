@@ -1,0 +1,16 @@
+version: '3'
+services:
+  amprobe:
+    image: amuluze/amprobe:v1.0
+    container_name: amprobe                                                          # 容器名为'postgresql'
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /dev:/host/dev:ro
+      - /etc:/host/etc:ro
+      - /:/rootfs:ro
+      - /data/amprobe/configs:/app/configs
+    ports:
+      - 80:80

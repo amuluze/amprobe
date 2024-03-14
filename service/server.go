@@ -1,0 +1,102 @@
+// Package service
+// Date: 2024/3/6 11:00
+// Author: Amu
+// Description:
+package service
+
+import (
+	"context"
+	"fmt"
+	"github.com/amuluze/amprobe/pkg/logger"
+	"github.com/gofiber/fiber/v2"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+)
+
+type options struct {
+	ConfigFile string
+}
+
+type Option func(*options)
+
+func SetConfigFile(s string) Option {
+	return func(o *options) {
+		o.ConfigFile = s
+	}
+}
+
+func InitHttpServer(ctx context.Context, config *Config, app *fiber.App) func() {
+	appConfig := config.Fiber
+	addr := fmt.Sprintf("%s:%d", appConfig.Host, appConfig.Port)
+	
+	go func() {
+		logger.Infof("Http Server is running on :%s", addr)
+		err := app.Listen(addr)
+		if err != nil {
+			logger.Errorf("Http Server exit")
+			panic(err)
+		}
+		logger.Infof("Http Server exit success.")
+	}()
+	
+	return func() {
+		_, cancel := context.WithTimeout(ctx, time.Second*time.Duration(appConfig.ShutdownTimeout))
+		defer cancel()
+		if err := app.Shutdown(); err != nil {
+			logger.Errorf(err.Error())
+		}
+		logger.Info("http service shutdown success.")
+	}
+}
+
+func Init(ctx context.Context, opts ...Option) (func(), error) {
+	var o options
+	for _, opt := range opts {
+		opt(&o)
+	}
+	injector, cleanFunc, err := BuildInjector(o.ConfigFile)
+	if err != nil {
+		return nil, err
+	}
+	logger.Infof("config: %#v\n", injector.Config)
+	httpServerCleanFunc := InitHttpServer(ctx, injector.Config, injector.App)
+	
+	timedTask := injector.Task
+	go timedTask.Run()
+	
+	return func() {
+		timedTask.Stop()
+		httpServerCleanFunc()
+		cleanFunc()
+	}, nil
+}
+
+func Run(ctx context.Context, opts ...Option) error {
+	state := 1
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	cleanFunc, err := Init(ctx, opts...)
+	if err != nil {
+		return err
+	}
+
+EXIT:
+	for {
+		sig := <-sc
+		switch sig {
+		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
+			state = 0
+			break EXIT
+		case syscall.SIGHUP:
+		default:
+			break EXIT
+		}
+	}
+	
+	cleanFunc()
+	time.Sleep(time.Second)
+	os.Exit(state)
+	return nil
+}
