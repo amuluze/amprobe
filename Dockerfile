@@ -19,8 +19,6 @@ RUN apt update && \
     chmod +x /app/amprobe
 
 COPY ./configs /app/configs
-COPY ./supervisor/ /etc/supervisor/conf.d/
-COPY ./nginx/conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./web/dist /usr/share/nginx/html
 
 EXPOSE 403 80
