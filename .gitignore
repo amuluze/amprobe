@@ -17,7 +17,6 @@
 .DS_Store
 .vscode
 probe.db
-*amprobe
 *__pycache__
 *.py[cod]
 
