@@ -21,7 +21,5 @@ RUN apt update && \
 COPY ./configs /app/configs
 COPY ./web/dist /usr/share/nginx/html
 
-EXPOSE 403 80
-
 # 这里有点坑，不加 -n 服务启动不了
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
