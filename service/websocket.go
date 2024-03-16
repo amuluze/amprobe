@@ -46,7 +46,7 @@ func (l *LoggerHandler) Handler(c *websocket.Conn) {
 		}
 		logger.Infof("receive message from client: %s", msg)
 		for scanner.Scan() {
-			logger.Info(scanner.Text())
+			logger.Infof("scanner text: %v", scanner.Text())
 			// scanner.Bytes() 前有 8 个字节的 the HEADER part,需要忽略掉
 			// https://medium.com/@dhanushgopinath/reading-docker-container-logs-with-golang-docker-engine-api-702233fac044
 			if err = c.WriteMessage(mt, scanner.Bytes()[8:]); err != nil {
