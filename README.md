@@ -42,7 +42,7 @@
 
 **主机状态监控**
 
-![image-20240317141142487](../../../Library/Application Support/typora-user-images/image-20240317141142487.png)
+![image-20240317141142487](https://gitee.com/amuluze/nezha/raw/image/Python3/images/202403171413053.png)
 
 ## 请作者喝杯咖啡
 
