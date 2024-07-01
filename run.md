@@ -29,3 +29,8 @@ https://blog.csdn.net/c_nwe_one/article/details/139645000
 https://gitee.com/wenxiaod/vuefile
 https://gitee.com/t438879/cloud-disk-web
 https://github.com/helloxz/zdir
+
+
+file upload
+
+https://gitee.com/ouhaoqiang/FileUploadGoServer/blob/master/api/v1/fileuploadapi.go
