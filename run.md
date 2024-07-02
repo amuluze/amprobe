@@ -19,8 +19,10 @@ tail -f /usr/local/var/log/amvector.err
 docker build -t amuluze/amprobe:v1.3.4 .
 
 # docker run
-docker run -tid --name amprobe -p 80:80 -p 8000:8000 -v /data/amprobe/configs:/app/configs -v /data/amprobe/nginx/nginx.conf:/etc/nginx/nginx.conf -v /data/amvector/amvector.socket:/app/amvector.socket -v /var/run/docker.sock:/var/run/docker.sock -v /data/web/dist:/usr/share/nginx/html/app amuluze/amprobe:v1.3.4
+docker run -tid --name amprobe -p 80:80 -p 8000:8000 -v /data/amprobe/configs:/app/configs -v /data/amprobe/nginx/nginx.conf:/etc/nginx/nginx.conf -v /data/amvector/amvector.socket:/app/amvector.socket -v /var/run/docker.sock:/var/run/docker.sock -v /data/web/dist:/usr/share/nginx/html/app -v /tmp:/tmp amuluze/amprobe:v1.3.4
 ```
+
+> /tmp:/tmp 文件上传下载时用到
 
 webssh
 
