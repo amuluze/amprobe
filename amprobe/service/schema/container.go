@@ -30,7 +30,7 @@ type ContainerQueryArgs struct {
 type QueryCountArgs struct{}
 
 type QueryCountReply struct {
-	Count int
+	Count int `json:"count"`
 }
 
 type ContainerCreateArgs struct {
@@ -45,7 +45,7 @@ type ContainerCreateArgs struct {
 }
 
 type ContainerCreateReply struct {
-	ContainerID string
+	ContainerID string `json:"container_id"`
 }
 
 type ContainerStartArgs struct {
@@ -113,8 +113,8 @@ type ImageImportArgs struct {
 type ImageImportReply struct{}
 
 type ImageExportArgs struct {
-	ImageIDs   []string
-	TargetFile string
+	ImageIDs   []string `json:"image_ids" validate:"required"`
+	TargetFile string   `json:"target_file" validate:"required"`
 }
 
 type ImageExportReply struct{}
@@ -128,7 +128,7 @@ type ImageRemoveReply struct{}
 type ImageCountArgs struct{}
 
 type ImageCountReply struct {
-	Count int
+	Count int `json:"count"`
 }
 
 type NetworkCreateArgs struct {
@@ -139,7 +139,7 @@ type NetworkCreateArgs struct {
 }
 
 type NetworkCreateReply struct {
-	NetworkID string
+	NetworkID string `json:"network_id"`
 }
 
 type NetworkListArgs struct {
@@ -167,11 +167,11 @@ type NetworkListReply struct {
 type NetworkCountArgs struct{}
 
 type NetworkCountReply struct {
-	Count int
+	Count int `json:"count"`
 }
 
 type NetworkDeleteArgs struct {
-	NetworkID string
+	NetworkID string `json:"network_id" validate:"required"`
 }
 
 type NetworkDeleteReply struct {

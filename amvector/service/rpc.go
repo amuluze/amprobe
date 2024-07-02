@@ -5,12 +5,13 @@
 package service
 
 import (
+	"net"
+
 	"github.com/amuluze/amutool/database"
 	"github.com/amuluze/amutool/docker"
 	"github.com/amuluze/amvector/service/rpc"
 	"github.com/smallnest/rpcx/server"
 	"github.com/smallnest/rpcx/share"
-	"net"
 )
 
 type Server struct {
