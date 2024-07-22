@@ -36,3 +36,7 @@ https://github.com/helloxz/zdir
 file upload
 
 https://gitee.com/ouhaoqiang/FileUploadGoServer/blob/master/api/v1/fileuploadapi.go
+
+
+https://blog.csdn.net/weixin_44016181/article/details/130464049
+https://blog.csdn.net/u011278722/article/details/137673353
