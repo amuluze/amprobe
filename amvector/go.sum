@@ -120,8 +120,10 @@ github.com/amuluze/amutool/logger v0.0.0-20240510090832-32eaf1044cf1 h1:0mVQmUET
 github.com/amuluze/amutool/logger v0.0.0-20240510090832-32eaf1044cf1/go.mod h1:NuTBHy/KcmWVEeC8ioqE3MzW2Sv4kUPxznJ5w+El9n4=
 github.com/amuluze/amutool/timex v0.0.0-20240510090832-32eaf1044cf1 h1:/WCpBBdx1+KDT+88fPtzRzv3qe+Gai5wL8tvfyqkR/Q=
 github.com/amuluze/amutool/timex v0.0.0-20240510090832-32eaf1044cf1/go.mod h1:i4gYDCtrLZRCopxiYdmmwmI5Da1nr6Pl/TMTUKTuIMw=
-github.com/amuluze/docker v0.0.0-20240809065643-4b172f98bf33 h1:JZrKKuujL/04oMtPjx8a7A3C38jK2nrksK7rD17aeBs=
-github.com/amuluze/docker v0.0.0-20240809065643-4b172f98bf33/go.mod h1:QEk+9tXbBBAlcxwSxTDzBMbNvl6WvW9K9BvvexnFeoQ=
+github.com/amuluze/docker v0.0.0-20240812090013-6edee42c1467 h1:M94mbYlhrsqruTPKpqLNQuY/6GASyez8B8uZCLYlEVM=
+github.com/amuluze/docker v0.0.0-20240812090013-6edee42c1467/go.mod h1:QEk+9tXbBBAlcxwSxTDzBMbNvl6WvW9K9BvvexnFeoQ=
+github.com/amuluze/docker v0.0.0-20240812095845-d490fd5ee640 h1:PxaERQhfpmpFa8XfLn1b3Suyf5EWV4MLbpCBfIiWphY=
+github.com/amuluze/docker v0.0.0-20240812095845-d490fd5ee640/go.mod h1:QEk+9tXbBBAlcxwSxTDzBMbNvl6WvW9K9BvvexnFeoQ=
 github.com/andybalholm/brotli v1.0.5/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/andybalholm/brotli v1.0.6 h1:Yf9fFpf49Zrxb9NlQaluyE92/+X7UVHlhMNJN2sxfOI=
 github.com/andybalholm/brotli v1.0.6/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
@@ -725,7 +727,6 @@ github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible h1:Y6sqxHMyB1D2YSzWkL
 github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible/go.mod h1:ZQnN8lSECaebrkQytbHj4xNgtg8CR7RYXnPok8e0EHA=
 github.com/lestrrat-go/strftime v1.0.6 h1:CFGsDEt1pOpFNU+TJB0nhz9jl+K0hZSLE205AhTIGQQ=
 github.com/lestrrat-go/strftime v1.0.6/go.mod h1:f7jQKgV5nnJpYgdEasS+/y7EsTb8ykN2z68n3TtcTaw=
-github.com/lib/pq v1.0.0 h1:X5PMW56eZitiTeO7tKzZxFCSpbFZJtkMMooicw2us9A=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/libp2p/go-sockaddr v0.2.0 h1:Alhhj6lGxVAon9O32tOO89T601EugSx6YiGjy5BVjWk=
 github.com/libp2p/go-sockaddr v0.2.0/go.mod h1:5NxulaB17yJ07IpzRIleys4un0PJ7WLWgMDLBBWrGw8=

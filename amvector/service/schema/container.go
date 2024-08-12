@@ -15,48 +15,61 @@ type ContainerQueryArgs struct {
 type QueryCountArgs struct{}
 
 type QueryCountReply struct {
-	Count int
+	Count int `json:"count"`
 }
 
 type ContainerCreateArgs struct {
-	ContainerName string
-	ImageName     string
-	NetworkID     string
-	NetworkMode   string
-	NetworkName   string
-	Ports         []string
-	Volumes       []string
-	Environments  []string
-	Labels        map[string]string
+	ContainerName string            `json:"container_name"`
+	ImageName     string            `json:"image_name"`
+	NetworkName   string            `json:"network_name"`
+	Ports         []string          `json:"ports"`
+	Volumes       []string          `json:"volumes"`
+	Environments  []string          `json:"environments"`
+	Labels        map[string]string `json:"labels"`
 }
 
 type ContainerCreateReply struct {
-	ContainerID string
+	ContainerID string `json:"container_id"`
+}
+
+type ContainerUpdateArgs struct {
+	ContainerID   string            `json:"container_id"`
+	ContainerName string            `json:"container_name"`
+	ImageName     string            `json:"image_name"`
+	NetworkName   string            `json:"network_name"`
+	Ports         []string          `json:"ports"`
+	Volumes       []string          `json:"volumes"`
+	Environments  []string          `json:"environments"`
+	Labels        map[string]string `json:"labels"`
+}
+
+type ContainerUpdateReply struct {
+	ContainerID string `json:"container_id"`
 }
 
 type ContainerDeleteArgs struct {
-	ContainerID string
+	ContainerID string `json:"container_id"`
 }
 
 type ContainerDeleteReply struct {
 }
 
 type ContainerStartArgs struct {
-	ContainerID string
+	ContainerID string `json:"container_id"`
 }
 
 type ContainerStartReply struct {
 }
 
 type ContainerStopArgs struct {
-	ContainerID string
+	ContainerID string `json:"container_id"`
 }
 
 type ContainerStopReply struct {
 }
 
 type ContainerRestartArgs struct {
-	ContainerID string
+	ContainerID string `json:"container_id"`
 }
 
 type ContainerRestartReply struct {
@@ -68,15 +81,15 @@ type ImageQueryArgs struct {
 }
 
 type ImagePullArgs struct {
-	ImageName string
+	ImageName string `json:"image_name"`
 }
 
 type ImagePullReply struct {
 }
 
 type ImageTagArgs struct {
-	OldTag string
-	NewTag string
+	OldTag string `json:"old_tag"`
+	NewTag string `json:"new_tag"`
 }
 
 type ImageTagReply struct {
@@ -85,39 +98,39 @@ type ImageTagReply struct {
 type ImageCountArgs struct{}
 
 type ImageCountReply struct {
-	Count int
+	Count int `json:"count"`
 }
 
 type ImageDeleteArgs struct {
-	ImageID string
+	ImageID string `json:"image_id"`
 }
 
 type ImageDeleteReply struct {
 }
 
 type ImageImportArgs struct {
-	SourceFile string
+	SourceFile string `json:"source_file"`
 }
 
 type ImageImportReply struct{}
 
 type ImageExportArgs struct {
-	ImageIDs   []string
-	TargetFile string
+	ImageIDs   []string `json:"image_ids"`
+	TargetFile string   `json:"target_file"`
 }
 
 type ImageExportReply struct{}
 
 type NetworkCreateArgs struct {
-	Name    string
-	Driver  string
-	Subnet  string
-	Gateway string
-	Labels  map[string]string
+	Name    string            `json:"name"`
+	Driver  string            `json:"driver"`
+	Subnet  string            `json:"subnet"`
+	Gateway string            `json:"gateway"`
+	Labels  map[string]string `json:"labels"`
 }
 
 type NetworkCreateReply struct {
-	NetworkID string
+	NetworkID string `json:"network_id"`
 }
 
 type NetworkQueryArgs struct {
@@ -128,11 +141,11 @@ type NetworkQueryArgs struct {
 type NetworkCountArgs struct{}
 
 type NetworkCountReply struct {
-	Count int
+	Count int `json:"count"`
 }
 
 type NetworkDeleteArgs struct {
-	NetworkID string
+	NetworkID string `json:"network_id"`
 }
 
 type NetworkDeleteReply struct {

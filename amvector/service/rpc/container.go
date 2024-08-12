@@ -111,6 +111,36 @@ func (s *Service) containerTask() {
 	s.DB.Model(&model.Container{}).Create(&containers)
 }
 
+func (s *Service) ContainerUpdate(ctx context.Context, args schema.ContainerUpdateArgs, reply *schema.ContainerUpdateReply) error {
+	exists, err := s.Manager.ContainerExists(ctx, args.ContainerID)
+	if err != nil {
+		return err
+	}
+	if exists {
+		err := s.Manager.DeleteContainer(ctx, args.ContainerID)
+		if err != nil {
+			return err
+		}
+		var cID string
+		if cID, err = s.Manager.CreateContainer(
+			ctx,
+			args.ContainerName,
+			args.ImageName,
+			args.NetworkName,
+			args.Ports,
+			args.Volumes,
+			args.Environments,
+			args.Labels,
+		); err != nil {
+			return err
+		}
+		s.containerTask()
+		s.imageTask()
+		reply.ContainerID = cID
+	}
+	return nil
+}
+
 func (s *Service) ContainerDelete(ctx context.Context, args schema.ContainerDeleteArgs, reply *schema.ContainerDeleteReply) error {
 	if err := s.Manager.DeleteContainer(ctx, args.ContainerID); err != nil {
 		return err
