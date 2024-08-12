@@ -12,6 +12,7 @@ type Container struct {
 	ID            string            `json:"id"`
 	Name          string            `json:"name"`
 	Image         string            `json:"image"`
+	Network       string            `json:"network"`
 	IP            string            `json:"ip"`
 	Ports         string            `json:"ports"`
 	ServerType    string            `json:"server_type"`
@@ -21,6 +22,8 @@ type Container struct {
 	MemoryPercent string            `json:"memory_percent"`
 	MemoryUsage   string            `json:"memory_usage"`
 	MemoryLimit   string            `json:"memory_limit"`
+	Volumes       string            `json:"volumes"`
+	Environments  string            `json:"environments"`
 	Labels        map[string]string `json:"labels"`
 }
 
@@ -48,6 +51,23 @@ type ContainerCreateArgs struct {
 }
 
 type ContainerCreateReply struct {
+	ContainerID string `json:"container_id"`
+}
+
+type ContainerUpdateArgs struct {
+	ContainerID   string            `json:"container_id" validate:"required"`
+	ContainerName string            `json:"container_name" validate:"required"`
+	ImageName     string            `json:"image_name" validate:"required"`
+	NetworkMode   string            `json:"network_mode" validate:"required"`
+	NetworkID     string            `json:"network_id"`
+	NetworkName   string            `json:"network_name"`
+	Ports         []string          `json:"ports"`
+	Volumes       []string          `json:"volumes"`
+	Environments  []string          `json:"environments"`
+	Labels        map[string]string `json:"labels"`
+}
+
+type ContainerUpdateReply struct {
 	ContainerID string `json:"container_id"`
 }
 

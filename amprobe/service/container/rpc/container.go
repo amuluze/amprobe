@@ -24,6 +24,7 @@ type IContainerService interface {
 	Version(ctx context.Context) (schema.Docker, error)
 	ContainerList(ctx context.Context, args schema.ContainerQueryArgs) (schema.ContainerQueryRely, error)
 	ContainerCreate(ctx context.Context, args schema.ContainerCreateArgs) (schema.ContainerCreateReply, error)
+	ContainerUpdate(ctx context.Context, args schema.ContainerUpdateArgs) (schema.ContainerUpdateReply, error)
 	ContainerStart(ctx context.Context, args schema.ContainerStartArgs) error
 	ContainerStop(ctx context.Context, args schema.ContainerStopArgs) error
 	ContainerRemove(ctx context.Context, args schema.ContainerRemoveArgs) error
@@ -89,6 +90,7 @@ func (c ContainerService) ContainerList(ctx context.Context, args schema.Contain
 			ID:            v.ContainerID[:6],
 			Name:          v.Name,
 			Image:         v.Image,
+			Network:       v.Network,
 			IP:            v.IP,
 			Ports:         v.Ports,
 			ServerType:    serverType,
@@ -98,6 +100,9 @@ func (c ContainerService) ContainerList(ctx context.Context, args schema.Contain
 			MemoryPercent: fmt.Sprintf("%.2f", v.MemPercent) + " %",
 			MemoryLimit:   utils.ConvertBytesToReadable(v.MemLimit),
 			MemoryUsage:   utils.ConvertBytesToReadable(v.MemUsage),
+			Volumes:       v.Volumes,
+			Environments:  v.Environments,
+			Labels:        labels,
 		})
 	}
 	countArgs := schema.QueryCountArgs{}
@@ -118,6 +123,15 @@ func (c ContainerService) ContainerCreate(ctx context.Context, args schema.Conta
 	err := c.RPCClient.Call(ctx, "ContainerCreate", args, &reply)
 	if err != nil {
 		return schema.ContainerCreateReply{}, err
+	}
+	return reply, nil
+}
+
+func (c ContainerService) ContainerUpdate(ctx context.Context, args schema.ContainerUpdateArgs) (schema.ContainerUpdateReply, error) {
+	var reply schema.ContainerUpdateReply
+	err := c.RPCClient.Call(ctx, "ContainerUpdate", args, &reply)
+	if err != nil {
+		return schema.ContainerUpdateReply{}, err
 	}
 	return reply, nil
 }

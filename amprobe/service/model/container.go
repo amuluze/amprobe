@@ -14,19 +14,22 @@ type Containers []Container
 
 type Container struct {
 	gorm.Model
-	Timestamp   time.Time
-	ContainerID string
-	Name        string
-	Image       string
-	IP          string
-	Ports       string
-	State       string
-	Uptime      string
-	CPUPercent  float64
-	MemPercent  float64
-	MemUsage    float64
-	MemLimit    float64
-	Labels      string
+	Timestamp    time.Time `json:"timestamp"`
+	ContainerID  string    `json:"container_id"`
+	Name         string    `json:"name"`
+	Image        string    `json:"image"`
+	Network      string    `json:"network"`
+	IP           string    `json:"ip"`
+	Ports        string    `json:"ports"`
+	State        string    `json:"state"`
+	Uptime       string    `json:"uptime"`
+	CPUPercent   float64   `json:"cpu_percent"`
+	MemPercent   float64   `json:"mem_percent"`
+	MemUsage     float64   `json:"mem_usage"`
+	MemLimit     float64   `json:"mem_limit"`
+	Volumes      string    `json:"volumes"`
+	Environments string    `json:"environments"`
+	Labels       string    `json:"labels"`
 }
 
 func (d *Container) TableName() string {
