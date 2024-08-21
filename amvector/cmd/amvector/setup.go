@@ -5,9 +5,9 @@
 package main
 
 import (
-	"fmt"
+	"github.com/amuluze/amprobe/amvector/pkg/compose"
 	"github.com/amuluze/amprobe/amvector/pkg/config"
-	"github.com/amuluze/amprobe/amvector/pkg/profile"
+	"path/filepath"
 )
 
 func runSetup() error {
@@ -15,7 +15,7 @@ func runSetup() error {
 		return err
 	}
 
-	if err := setupServiceConfig(prefix); err != nil {
+	if err := setupComposeConfig(prefix); err != nil {
 		return err
 	}
 
@@ -33,27 +33,36 @@ func setupConfig(prefix, configFile string) error {
 	return nil
 }
 
-func setupServiceConfig(prefix string) error {
-	registryServices := profile.RegistryServices.Services
-
-	serviceBuilderMap := make(map[string]profile.ServiceBuilder)
-	for _, registryService := range registryServices {
-		serviceBuilder, err := registryService.Builder()
-		if err != nil {
-			return err
-		}
-		fmt.Printf("service name: %#v\n", registryService.Name)
-		serviceBuilderMap[registryService.Name] = serviceBuilder
-	}
-	profileBuilder := profile.NewProfileBuilder(serviceBuilderMap)
-	if err := profileBuilder.InitResources(prefix); err != nil {
-		return err
-	}
-	if err := profileBuilder.BuildProfile(prefix); err != nil {
-		return err
-	}
-	if err := profileBuilder.Save(prefix); err != nil {
+func setupComposeConfig(prefix string) error {
+	filePath := filepath.Join(prefix, "docker-compose.yml")
+	err := compose.GenerateDockerCompose(filePath)
+	if err != nil {
 		return err
 	}
 	return nil
 }
+
+//func setupServiceConfig(prefix string) error {
+//	registryServices := profile.RegistryServices.Services
+//
+//	serviceBuilderMap := make(map[string]profile.ServiceBuilder)
+//	for _, registryService := range registryServices {
+//		serviceBuilder, err := registryService.Builder()
+//		if err != nil {
+//			return err
+//		}
+//		fmt.Printf("service name: %#v\n", registryService.Name)
+//		serviceBuilderMap[registryService.Name] = serviceBuilder
+//	}
+//	profileBuilder := profile.NewProfileBuilder(serviceBuilderMap)
+//	if err := profileBuilder.InitResources(prefix); err != nil {
+//		return err
+//	}
+//	if err := profileBuilder.BuildProfile(prefix); err != nil {
+//		return err
+//	}
+//	if err := profileBuilder.Save(prefix); err != nil {
+//		return err
+//	}
+//	return nil
+//}

@@ -36,9 +36,10 @@ func Run(configFile string, prefix Prefix) (func(), error) {
 	}()
 
 	slog.Info("service profile", "info", fmt.Sprintf("%#v", injector.Config))
-	if err := setupService(injector.Config.Profile); err != nil {
-		slog.Error("setup service failed:", "err", err)
-	}
+	// Docker 服务管理交由 docker-compose 来做
+	//if err := setupService(injector.Config.Profile); err != nil {
+	//	slog.Error("setup service failed:", "err", err)
+	//}
 
 	return func() {
 		timedTask.Stop()
