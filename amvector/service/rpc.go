@@ -5,12 +5,13 @@
 package service
 
 import (
+	"path/filepath"
+
 	"github.com/amuluze/amprobe/amvector/pkg/resources"
 	"github.com/amuluze/amprobe/amvector/service/rpc"
-	"github.com/amuluze/amutool/database"
+	"github.com/amuluze/amprobe/common/database"
 	"github.com/amuluze/docker"
 	"github.com/smallnest/rpcx/server"
-	"path/filepath"
 )
 
 type Server struct {

@@ -6,9 +6,10 @@ package rpc
 
 import (
 	"context"
+
 	"github.com/amuluze/amprobe/amvector/service/model"
 	"github.com/amuluze/amprobe/amvector/service/schema"
-	"github.com/amuluze/amutool/database"
+	"github.com/amuluze/amprobe/common/database"
 	"github.com/amuluze/docker"
 	"github.com/patrickmn/go-cache"
 )

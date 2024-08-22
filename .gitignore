@@ -11,3 +11,5 @@ amprobe.tar.gz
 amprobe.arm.tar.gz
 todo.md
 run.md
+go.work
+go.work.sum

@@ -10,7 +10,7 @@ import (
 
 	"github.com/amuluze/amprobe/amvector/service/task"
 
-	"github.com/amuluze/amutool/database"
+	"github.com/amuluze/amprobe/common/database"
 	"github.com/amuluze/amutool/timex"
 	"github.com/amuluze/docker"
 )
