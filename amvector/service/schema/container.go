@@ -25,6 +25,7 @@ type ContainerCreateArgs struct {
 	Ports         []string          `json:"ports"`
 	Volumes       []string          `json:"volumes"`
 	Environments  []string          `json:"environments"`
+	Commands      []string          `json:"commands"`
 	Labels        map[string]string `json:"labels"`
 }
 
@@ -40,6 +41,7 @@ type ContainerUpdateArgs struct {
 	Ports         []string          `json:"ports"`
 	Volumes       []string          `json:"volumes"`
 	Environments  []string          `json:"environments"`
+	Commands      []string          `json:"commands"`
 	Labels        map[string]string `json:"labels"`
 }
 

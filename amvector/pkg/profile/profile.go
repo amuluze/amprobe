@@ -9,9 +9,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/amuluze/amprobe/amvector/pkg/utils"
+	"amvector/pkg/utils"
 
-	"github.com/amuluze/amprobe/amvector/pkg/resources"
+	"amvector/pkg/resources"
+
 	"gopkg.in/yaml.v2"
 )
 

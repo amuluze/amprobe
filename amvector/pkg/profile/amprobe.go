@@ -9,9 +9,10 @@ import (
 
 	"github.com/amuluze/docker"
 
-	"github.com/amuluze/amprobe/amvector/assets"
-	"github.com/amuluze/amprobe/amvector/pkg/resources"
-	"github.com/amuluze/amprobe/amvector/pkg/utils"
+	"amvector/assets"
+
+	"amvector/pkg/resources"
+	"amvector/pkg/utils"
 	"github.com/docker/libcompose/yaml"
 	"github.com/mcuadros/go-defaults"
 )

@@ -5,8 +5,9 @@
 package service
 
 import (
-	"github.com/amuluze/amprobe/amvector/service/model"
-	"github.com/amuluze/amprobe/common/database"
+	"common/database"
+
+	"amvector/service/model"
 )
 
 func NewDB(config *Config, models *model.Models) (*database.DB, error) {

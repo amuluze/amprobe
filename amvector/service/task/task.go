@@ -7,7 +7,8 @@ package task
 import (
 	"time"
 
-	"github.com/amuluze/amprobe/common/database"
+	"common/database"
+
 	"github.com/amuluze/docker"
 	"github.com/patrickmn/go-cache"
 )

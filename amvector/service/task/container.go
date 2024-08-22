@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/amuluze/amprobe/amvector/service/model"
+	"amvector/service/model"
 )
 
 func (a *Task) Container(timestamp time.Time) {

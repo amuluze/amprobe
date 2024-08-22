@@ -5,11 +5,13 @@
 package service
 
 import (
+	"amvector/service/rpc"
 	"path/filepath"
 
-	"github.com/amuluze/amprobe/amvector/pkg/resources"
-	"github.com/amuluze/amprobe/amvector/service/rpc"
-	"github.com/amuluze/amprobe/common/database"
+	"common/database"
+
+	"amvector/pkg/resources"
+
 	"github.com/amuluze/docker"
 	"github.com/smallnest/rpcx/server"
 )

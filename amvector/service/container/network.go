@@ -5,8 +5,8 @@
 package container
 
 import (
+	"amvector/pkg/profile"
 	"context"
-	"github.com/amuluze/amprobe/amvector/pkg/profile"
 )
 
 func (m *Manager) CreateNetwork(profile *profile.NetworkProfile) error {

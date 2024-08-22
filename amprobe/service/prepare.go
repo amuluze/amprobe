@@ -8,10 +8,14 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/amuluze/amprobe/common/database"
-	"github.com/amuluze/amprobe/pkg/utils/hash"
-	"github.com/amuluze/amprobe/pkg/utils/uuid"
-	"github.com/amuluze/amprobe/service/model"
+	"common/database"
+
+	"amprobe/pkg/utils/hash"
+
+	"amprobe/pkg/utils/uuid"
+
+	"amprobe/service/model"
+
 	"github.com/google/wire"
 	"gorm.io/gorm"
 

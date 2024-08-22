@@ -1,13 +1,12 @@
 TARGET 			= amvector
 SERVER   = ./cmd/${TARGET}
 
-GO         = go
-GOBUILD    = $(GO) build
-
-INSTALLER  = amvector.install
-OBJPATH    = amvector-obj
-GOBINDATA  = go-bindata
-BINDATAPKG = assets
+GO          = go
+GOBUILD     = $(GO) build
+INSTALLER   = amvector.install
+OBJPATH     = amvector-obj
+GOBINDATA   = go-bindata
+BINDATAPKG  = assets
 BINDATAPATH = $(BINDATAPKG)/bindata.go
 
 .PHONY: amd64

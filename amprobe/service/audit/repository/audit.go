@@ -7,9 +7,12 @@ package repository
 import (
 	"context"
 
-	"github.com/amuluze/amprobe/common/database"
-	"github.com/amuluze/amprobe/service/model"
-	"github.com/amuluze/amprobe/service/schema"
+	"common/database"
+
+	"amprobe/service/model"
+
+	"amprobe/service/schema"
+
 	"github.com/google/wire"
 )
 

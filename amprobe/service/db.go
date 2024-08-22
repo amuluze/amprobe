@@ -5,10 +5,10 @@
 package service
 
 import (
-	"github.com/amuluze/amprobe/common/database"
+	"common/database"
 	"strings"
 
-	"github.com/amuluze/amprobe/service/model"
+	"amprobe/service/model"
 )
 
 func NewDB(config *Config, models *model.Models) (*database.DB, error) {

@@ -5,6 +5,7 @@
 package rpc
 
 import (
+	"amvector/service/schema"
 	"context"
 	"encoding/json"
 	"log/slog"
@@ -12,9 +13,7 @@ import (
 
 	"github.com/amuluze/docker"
 
-	"github.com/amuluze/amprobe/amvector/service/model"
-
-	"github.com/amuluze/amprobe/amvector/service/schema"
+	"amvector/service/model"
 )
 
 func (s *Service) DockerVersion(ctx context.Context, args schema.VersionArgs, reply *model.Docker) error {
@@ -51,6 +50,7 @@ func (s *Service) ContainerCreate(ctx context.Context, args schema.ContainerCrea
 		args.Ports,
 		args.Volumes,
 		args.Environments,
+		args.Commands,
 		args.Labels,
 	); err != nil {
 		return err
@@ -130,6 +130,7 @@ func (s *Service) ContainerUpdate(ctx context.Context, args schema.ContainerUpda
 			args.Ports,
 			args.Volumes,
 			args.Environments,
+			args.Commands,
 			args.Labels,
 		); err != nil {
 			return err

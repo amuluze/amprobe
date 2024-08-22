@@ -5,12 +5,11 @@
 package rpc
 
 import (
+	"amvector/service/schema"
 	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/amuluze/amprobe/amvector/service/schema"
 )
 
 func DirSize(path string) (int64, error) {

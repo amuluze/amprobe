@@ -1,7 +1,7 @@
 // Package config
 // Date: 2024/7/2 14:38
 // Author: Amu
-// Description: amprobe/amvector 的配置文件 config.yml 的生成
+// Description: amvector 的配置文件 config.yml 的生成
 package config
 
 import (
@@ -10,8 +10,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/amuluze/amprobe/amvector/pkg/resources"
-	"github.com/amuluze/amprobe/amvector/pkg/utils"
+	"amvector/pkg/resources"
+
+	"amvector/pkg/utils"
 
 	"gopkg.in/yaml.v2"
 )

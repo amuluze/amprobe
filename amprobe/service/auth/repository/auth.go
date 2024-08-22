@@ -7,10 +7,14 @@ package repository
 import (
 	"context"
 
-	"github.com/amuluze/amprobe/common/database"
-	"github.com/amuluze/amprobe/pkg/utils/hash"
-	"github.com/amuluze/amprobe/service/model"
-	"github.com/amuluze/amprobe/service/schema"
+	"common/database"
+
+	"amprobe/pkg/utils/hash"
+
+	"amprobe/service/model"
+
+	"amprobe/service/schema"
+
 	"github.com/amuluze/amutool/errors"
 	"github.com/google/wire"
 	"gorm.io/gorm"

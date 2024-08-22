@@ -12,9 +12,12 @@ import (
 
 	"github.com/patrickmn/go-cache"
 
-	"github.com/amuluze/amprobe/common/database"
-	"github.com/amuluze/amprobe/pkg/psutil"
-	"github.com/amuluze/amprobe/service/model"
+	"common/database"
+
+	"amprobe/pkg/psutil"
+
+	"amprobe/service/model"
+
 	"github.com/amuluze/amutool/timex"
 	"github.com/amuluze/docker"
 )

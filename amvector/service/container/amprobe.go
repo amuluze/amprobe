@@ -5,9 +5,9 @@
 package container
 
 import (
+	"amvector/pkg/profile"
 	"context"
 	"fmt"
-	"github.com/amuluze/amprobe/amvector/pkg/profile"
 )
 
 func (m *Manager) CreateAmprobe(profile *profile.AmprobeProfile) error {
@@ -38,6 +38,7 @@ func (m *Manager) CreateAmprobe(profile *profile.AmprobeProfile) error {
 		profile.Ports,
 		vols,
 		profile.Environment,
+		nil,
 		nil,
 	)
 	if err != nil {

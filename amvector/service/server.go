@@ -8,8 +8,9 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/amuluze/amprobe/amvector/pkg/profile"
-	"github.com/amuluze/amprobe/amvector/service/container"
+	"amvector/pkg/profile"
+
+	"amvector/service/container"
 )
 
 func Run(configFile string, prefix Prefix) (func(), error) {

@@ -8,9 +8,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/amuluze/amprobe/amvector/service/task"
+	"amvector/service/task"
 
-	"github.com/amuluze/amprobe/common/database"
+	"common/database"
+
 	"github.com/amuluze/amutool/timex"
 	"github.com/amuluze/docker"
 )

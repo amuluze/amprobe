@@ -5,8 +5,8 @@
 package main
 
 import (
-	"github.com/amuluze/amprobe/amvector/pkg/compose"
-	"github.com/amuluze/amprobe/amvector/pkg/config"
+	"amvector/pkg/compose"
+	"amvector/pkg/config"
 	"path/filepath"
 )
 
