@@ -8,7 +8,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/amuluze/amprobe/pkg/database"
+	"github.com/amuluze/amprobe/common/database"
+
 	"github.com/amuluze/amprobe/service/model"
 	"github.com/amuluze/amprobe/service/schema"
 	"github.com/google/wire"

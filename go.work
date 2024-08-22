@@ -3,5 +3,5 @@ go 1.21.9
 use (
 	./amprobe
 	./amvector
-	./nginx
+	./common
 )

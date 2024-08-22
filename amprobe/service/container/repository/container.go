@@ -11,7 +11,7 @@ import (
 	"github.com/amuluze/amutool/errors"
 	"github.com/amuluze/docker"
 
-	"github.com/amuluze/amprobe/pkg/database"
+	"github.com/amuluze/amprobe/common/database"
 	"github.com/amuluze/amprobe/service/model"
 	"github.com/google/wire"
 )

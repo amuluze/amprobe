@@ -7,7 +7,7 @@ package repository
 import (
 	"context"
 
-	"github.com/amuluze/amprobe/pkg/database"
+	"github.com/amuluze/amprobe/common/database"
 	"github.com/amuluze/amprobe/pkg/utils/hash"
 	"github.com/amuluze/amprobe/service/model"
 	"github.com/amuluze/amprobe/service/schema"

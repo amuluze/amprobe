@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/amuluze/amprobe/pkg/database"
+	"github.com/amuluze/amprobe/common/database"
 	"github.com/amuluze/amprobe/pkg/utils/hash"
 	"github.com/amuluze/amprobe/pkg/utils/uuid"
 	"github.com/amuluze/amprobe/service/model"

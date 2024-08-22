@@ -5,9 +5,9 @@
 package service
 
 import (
+	"github.com/amuluze/amprobe/common/database"
 	"strings"
 
-	"github.com/amuluze/amprobe/pkg/database"
 	"github.com/amuluze/amprobe/service/model"
 )
 
