@@ -6,12 +6,13 @@ package rpc
 
 import (
 	"amvector/service/model"
+	"common/rpc"
 	"context"
-
+	
 	"common/database"
-
+	
 	"amvector/service/schema"
-
+	
 	"github.com/amuluze/docker"
 	"github.com/patrickmn/go-cache"
 )
@@ -40,6 +41,17 @@ type IService interface {
 	NetworkCreate(context.Context, schema.NetworkCreateArgs, *schema.NetworkCreateReply) error
 	NetworkCount(context.Context, schema.NetworkCountArgs, *schema.NetworkCountReply) error
 	NetworkDelete(context.Context, schema.NetworkDeleteArgs, *schema.NetworkDeleteReply) error
+	
+	DockerSummary(context.Context, rpc.DockerSummaryArgs, *rpc.DockerSummaryReply) error
+	ContainerSummary(context.Context, rpc.ContainerSummaryArgs, *rpc.ContainerSummaryReply) error
+	ImageSummary(context.Context, rpc.ImageSummaryArgs, *rpc.ImageSummaryReply) error
+	NetworkSummary(context.Context, rpc.NetworkSummaryArgs, *rpc.NetworkSummaryReply) error
+	HostSummary(context.Context, rpc.HostSummaryArgs, *rpc.HostSummaryReply) error
+	CPUSummary(context.Context, rpc.CPUSummaryArgs, *rpc.CPUSummaryReply) error
+	MemorySummary(context.Context, rpc.MemorySummaryArgs, *rpc.MemorySummaryReply) error
+	DiskSummary(context.Context, rpc.DiskSummaryArgs, *rpc.DiskSummaryReply) error
+	NetSummary(context.Context, rpc.NetSummaryArgs, *rpc.NetSummaryReply) error
+	
 	FilesSearch(context.Context, schema.FilesSearchArgs, *schema.FilesSearchReply) error
 	DirSize(context.Context, schema.DirSizeArgs, *schema.DirSizeReply) error
 	FileCreate(context.Context, schema.FileCreateArgs, *schema.FileCreateReply) error
