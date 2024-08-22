@@ -4,7 +4,7 @@ ENV GO111MODULE="on" \
     GOPROXY=https://goproxy.cn,direct
 
 RUN cd /app/amprobe && \
-    GOOS=linux go build -a -tags netgo -o /app/amprobe/amprobe ./cmd/amprobe
+    go build -a -tags netgo -o /app/amprobe/amprobe ./cmd/amprobe
 
 FROM ubuntu:22.04
 WORKDIR /app
