@@ -6,9 +6,10 @@ package repository
 
 import (
 	"context"
+
+	"github.com/amuluze/amprobe/pkg/database"
 	"github.com/amuluze/amprobe/service/model"
 	"github.com/amuluze/amprobe/service/schema"
-	"github.com/amuluze/amutool/database"
 	"github.com/google/wire"
 )
 

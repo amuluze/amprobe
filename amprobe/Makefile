@@ -2,11 +2,10 @@ APP 			= amprobe
 SERVER  		= ./cmd/${APP}
 RELEASE_SERVER 	= release/${APP}/${APP}
 
-IMAGE = amuluze/amprobe
-TAG = v1.3.6
-
-GO 				= go
-CONFIG_FILE := $(shell pwd)/configs/config.toml
+IMAGE        = amuluze/amprobe
+TAG          = v1.3.6
+GO 	  		 = go
+CONFIG_FILE  = $(shell pwd)/configs/config.toml
 
 .PHONY: dev
 # run dev

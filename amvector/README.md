@@ -5,29 +5,36 @@
 安装：
 
 ```bash
-amprobe/amvector install
+amvector install
 ```
 
 启动
 
 ```bash
-amprobe/amvector start
+amvector start
 ```
 
 停止
 
 ```bash
-amprobe/amvector stop
+amvector stop
 ```
 
 移除
 
 ```bash
-amprobe/amvector remove
+amvector remove
 ```
 
 查看状态
 
 ```bash
-amprobe/amvector status
+amvector status
+```
+
+
+生成配置文件
+
+```bash
+amvector setup -p /data/amprobe
 ```
