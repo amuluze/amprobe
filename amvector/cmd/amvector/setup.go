@@ -14,11 +14,11 @@ func runSetup() error {
 	if err := setupConfig(prefix, configFile); err != nil {
 		return err
 	}
-
+	
 	if err := setupComposeConfig(prefix); err != nil {
 		return err
 	}
-
+	
 	return nil
 }
 
@@ -41,28 +41,3 @@ func setupComposeConfig(prefix string) error {
 	}
 	return nil
 }
-
-//func setupServiceConfig(prefix string) error {
-//	registryServices := profile.RegistryServices.Services
-//
-//	serviceBuilderMap := make(map[string]profile.ServiceBuilder)
-//	for _, registryService := range registryServices {
-//		serviceBuilder, err := registryService.Builder()
-//		if err != nil {
-//			return err
-//		}
-//		fmt.Printf("service name: %#v\n", registryService.Name)
-//		serviceBuilderMap[registryService.Name] = serviceBuilder
-//	}
-//	profileBuilder := profile.NewProfileBuilder(serviceBuilderMap)
-//	if err := profileBuilder.InitResources(prefix); err != nil {
-//		return err
-//	}
-//	if err := profileBuilder.BuildProfile(prefix); err != nil {
-//		return err
-//	}
-//	if err := profileBuilder.Save(prefix); err != nil {
-//		return err
-//	}
-//	return nil
-//}

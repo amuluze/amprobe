@@ -5,17 +5,13 @@
 package api
 
 import (
-	"amprobe/pkg/contextx"
 	"fmt"
-
+	
+	"amprobe/pkg/contextx"
 	"amprobe/pkg/fiberx"
-
 	"amprobe/pkg/validatex"
-
 	"amprobe/service/auth/service"
-
 	"amprobe/service/schema"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -29,16 +25,16 @@ func NewLoginAPI(userService *service.AuthService) *AuthAPI {
 
 func (a *AuthAPI) Login(ctx *fiber.Ctx) error {
 	c := ctx.UserContext()
-
+	
 	var args schema.LoginArgs
 	if err := fiberx.ParseBody(ctx, &args); err != nil {
 		return fiberx.Failure(ctx, err)
 	}
-
+	
 	if err := validatex.ValidateStruct(args); err != nil {
 		return fiberx.Failure(ctx, err)
 	}
-
+	
 	res, err := a.AuthService.Login(c, &args)
 	if err != nil {
 		return fiberx.Failure(ctx, err)
@@ -54,7 +50,7 @@ func (a *AuthAPI) Logout(ctx *fiber.Ctx) error {
 	if err := a.AuthService.Logout(c, userID, tokenString); err != nil {
 		return fiberx.Failure(ctx, err)
 	}
-
+	
 	return fiberx.NoContent(ctx)
 }
 
@@ -64,11 +60,11 @@ func (a *AuthAPI) PassUpdate(ctx *fiber.Ctx) error {
 	if err := fiberx.ParseBody(ctx, &args); err != nil {
 		return fiberx.Failure(ctx, err)
 	}
-
+	
 	if err := validatex.ValidateStruct(args); err != nil {
 		return fiberx.Failure(ctx, err)
 	}
-
+	
 	err := a.AuthService.PassUpdate(c, &args)
 	if err != nil {
 		return fiberx.Failure(ctx, err)

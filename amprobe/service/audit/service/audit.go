@@ -5,11 +5,11 @@
 package service
 
 import (
-	"amprobe/service/audit/repository"
 	"context"
-
+	
+	"amprobe/service/audit/repository"
 	"amprobe/service/schema"
-
+	
 	"github.com/amuluze/amutool/errors"
 	"github.com/google/wire"
 )
@@ -33,7 +33,7 @@ func (a AuditService) AuditQuery(ctx context.Context, args *schema.AuditQueryArg
 	if err != nil {
 		return &schema.AuditQueryReply{}, errors.New400Error(err.Error())
 	}
-
+	
 	var list []schema.Audit
 	for _, audit := range audits {
 		list = append(list, schema.Audit{

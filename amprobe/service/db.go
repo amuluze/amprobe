@@ -5,16 +5,13 @@
 package service
 
 import (
-	"common/database"
 	"strings"
-
+	
+	"amprobe/pkg/database"
 	"amprobe/service/model"
 )
 
 func NewDB(config *Config, models *model.Models) (*database.DB, error) {
-	if config.Gorm.GenDoc {
-		return nil, nil
-	}
 	gormConfig := config.Gorm
 	dbConfig := config.DB
 	db, err := database.NewDB(

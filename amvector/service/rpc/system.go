@@ -5,25 +5,21 @@
 package rpc
 
 import (
+	"common/rpc"
 	"context"
 	"encoding/json"
 	"errors"
 	"os"
 	"time"
-
-	"amvector/pkg/utils"
-
+	
 	"amvector/pkg/timectl"
-
-	"amvector/service/constants"
-
-	"amvector/service/schema"
-
+	"amvector/pkg/utils"
+	
 	"github.com/docker/docker/libnetwork/resolvconf"
 )
 
 // Reboot 重启
-func (s *Service) Reboot(ctx context.Context, args schema.RebootArgs, reply *schema.RebootReply) error {
+func (s *Service) Reboot(ctx context.Context, args rpc.RebootArgs, reply *rpc.RebootReply) error {
 	if _, err := utils.RunCommand(ctx, "reboot"); err != nil {
 		return errors.New("failed to reboot: " + err.Error())
 	}
@@ -31,7 +27,7 @@ func (s *Service) Reboot(ctx context.Context, args schema.RebootArgs, reply *sch
 }
 
 // Shutdown 关机
-func (s *Service) Shutdown(ctx context.Context, args schema.ShutdownArgs, reply *schema.ShutdownReply) error {
+func (s *Service) Shutdown(ctx context.Context, args rpc.ShutdownArgs, reply *rpc.ShutdownReply) error {
 	if _, err := utils.RunCommand(ctx, "shutdown"); err != nil {
 		return errors.New("failed to shutdown: " + err.Error())
 	}
@@ -39,7 +35,7 @@ func (s *Service) Shutdown(ctx context.Context, args schema.ShutdownArgs, reply 
 }
 
 // GetDNS 获取 DNS 配置
-func (s *Service) GetDNS(ctx context.Context, args schema.GetDNSArgs, reply *schema.GetDNSReply) error {
+func (s *Service) GetDNS(ctx context.Context, args rpc.GetDNSArgs, reply *rpc.GetDNSReply) error {
 	resolvConf, err := resolvconf.Get()
 	if err != nil {
 		return err
@@ -49,7 +45,7 @@ func (s *Service) GetDNS(ctx context.Context, args schema.GetDNSArgs, reply *sch
 }
 
 // SetDNS 更新 DNS 配置
-func (s *Service) SetDNS(ctx context.Context, args schema.SetDNSArgs, reply *schema.SetDNSReply) error {
+func (s *Service) SetDNS(ctx context.Context, args rpc.SetDNSArgs, reply *rpc.SetDNSReply) error {
 	_, err := resolvconf.Build(resolvconf.Path(), args.DNS, []string{}, []string{})
 	if err != nil {
 		return err
@@ -58,7 +54,7 @@ func (s *Service) SetDNS(ctx context.Context, args schema.SetDNSArgs, reply *sch
 }
 
 // GetSystemTime 获取系统时间
-func (s *Service) GetSystemTime(ctx context.Context, args schema.GetSystemTimeArgs, reply *schema.GetSystemTimeReply) error {
+func (s *Service) GetSystemTime(ctx context.Context, args rpc.GetSystemTimeArgs, reply *rpc.GetSystemTimeReply) error {
 	systemTime, err := timectl.GetTime(ctx)
 	if err != nil {
 		return err
@@ -68,7 +64,7 @@ func (s *Service) GetSystemTime(ctx context.Context, args schema.GetSystemTimeAr
 }
 
 // SetSystemTime 设置系统时间
-func (s *Service) SetSystemTime(ctx context.Context, args schema.SetSystemTimeArgs, reply *schema.SetSystemTimeReply) error {
+func (s *Service) SetSystemTime(ctx context.Context, args rpc.SetSystemTimeArgs, reply *rpc.SetSystemTimeReply) error {
 	tt, err := time.Parse(args.SystemTime, "2006-01-02 15:04:05")
 	if err != nil {
 		return err
@@ -80,8 +76,8 @@ func (s *Service) SetSystemTime(ctx context.Context, args schema.SetSystemTimeAr
 	return nil
 }
 
-// GetSystemTimeZoneList
-func (s *Service) GetSystemTimeZoneList(ctx context.Context, args schema.GetSystemTimeZoneListArgs, reply *schema.GetSystemTimeZoneListReply) error {
+// GetSystemTimeZoneList 获取时区列表
+func (s *Service) GetSystemTimeZoneList(ctx context.Context, args rpc.GetSystemTimeZoneListArgs, reply *rpc.GetSystemTimeZoneListReply) error {
 	tzList, err := timectl.GetTimeZoneList(ctx)
 	if err != nil {
 		return err
@@ -91,7 +87,7 @@ func (s *Service) GetSystemTimeZoneList(ctx context.Context, args schema.GetSyst
 }
 
 // GetSystemTimeZone 获取系统时区
-func (s *Service) GetSystemTimeZone(ctx context.Context, args schema.GetSystemTimeZoneArgs, reply *schema.GetSystemTimeZoneReply) error {
+func (s *Service) GetSystemTimeZone(ctx context.Context, args rpc.GetSystemTimeZoneArgs, reply *rpc.GetSystemTimeZoneReply) error {
 	tz, err := timectl.GetTimeZone(ctx)
 	if err != nil {
 		return err
@@ -101,7 +97,7 @@ func (s *Service) GetSystemTimeZone(ctx context.Context, args schema.GetSystemTi
 }
 
 // SetSystemTimeZone 设置系统时区
-func (s *Service) SetSystemTimeZone(ctx context.Context, args schema.SetSystemTimeZoneArgs, reply *schema.SetSystemTimeZoneReply) error {
+func (s *Service) SetSystemTimeZone(ctx context.Context, args rpc.SetSystemTimeZoneArgs, reply *rpc.SetSystemTimeZoneReply) error {
 	if err := timectl.SetTimeZone(ctx, args.SystemTimeZone); err != nil {
 		return err
 	}
@@ -109,11 +105,11 @@ func (s *Service) SetSystemTimeZone(ctx context.Context, args schema.SetSystemTi
 }
 
 // GetDockerRegistryMirrors 读取 Docker daemon.json 配置文件
-func (s *Service) GetDockerRegistryMirrors(ctx context.Context, args schema.GetDockerRegistryMirrorsArgs, reply *schema.GetDockerRegistryMirrorsReply) error {
-	if _, err := os.Stat(constants.DaemonJsonPath); err != nil {
+func (s *Service) GetDockerRegistryMirrors(ctx context.Context, args rpc.GetDockerRegistryMirrorsArgs, reply *rpc.GetDockerRegistryMirrorsReply) error {
+	if _, err := os.Stat(DaemonJsonPath); err != nil {
 		return err
 	}
-	file, err := os.ReadFile(constants.DaemonJsonPath)
+	file, err := os.ReadFile(DaemonJsonPath)
 	if err != nil {
 		return err
 	}
@@ -130,9 +126,9 @@ func (s *Service) GetDockerRegistryMirrors(ctx context.Context, args schema.GetD
 }
 
 // SetDockerRegistryMirrors 更新 Docker daemon.json 配置文件
-func (s *Service) SetDockerRegistryMirrors(ctx context.Context, args schema.SetDockerRegistryMirrorsArgs, reply *schema.SetDockerRegistryMirrorsReply) error {
+func (s *Service) SetDockerRegistryMirrors(ctx context.Context, args rpc.SetDockerRegistryMirrorsArgs, reply *rpc.SetDockerRegistryMirrorsReply) error {
 	// 判断 constants.DaemonJsonPath 文件是否存在
-	if _, err := os.Stat(constants.DaemonJsonPath); err != nil {
+	if _, err := os.Stat(DaemonJsonPath); err != nil {
 		// 创建 constants.DaemonJsonPath
 		daemonMap := map[string]interface{}{
 			"registry-mirrors": args.Mirrors,
@@ -142,11 +138,11 @@ func (s *Service) SetDockerRegistryMirrors(ctx context.Context, args schema.SetD
 		if err != nil {
 			return err
 		}
-		if err := os.WriteFile(constants.DaemonJsonPath, setting, 0644); err != nil {
+		if err := os.WriteFile(DaemonJsonPath, setting, 0644); err != nil {
 			return err
 		}
 	} else {
-		file, err := os.ReadFile(constants.DaemonJsonPath)
+		file, err := os.ReadFile(DaemonJsonPath)
 		if err != nil {
 			return err
 		}
@@ -159,7 +155,7 @@ func (s *Service) SetDockerRegistryMirrors(ctx context.Context, args schema.SetD
 		if err != nil {
 			return err
 		}
-		if err := os.WriteFile(constants.DaemonJsonPath, setting, 0644); err != nil {
+		if err := os.WriteFile(DaemonJsonPath, setting, 0644); err != nil {
 			return err
 		}
 	}

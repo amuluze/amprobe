@@ -5,22 +5,39 @@
 package service
 
 import (
-	"log/slog"
-	"os"
-
-	"common/database"
-
+	"amprobe/pkg/database"
 	"amprobe/pkg/utils/hash"
-
 	"amprobe/pkg/utils/uuid"
-
 	"amprobe/service/model"
-
+	
 	"github.com/google/wire"
 	"gorm.io/gorm"
-
-	"gopkg.in/yaml.v2"
 )
+
+type User struct {
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Remark   string `yaml:"remark"`
+	IsAdmin  int    `yaml:"is_admin"`
+	Status   int    `yaml:"status"`
+}
+
+var users = []User{
+	{
+		Username: "admin",
+		Password: "admin123",
+		Remark:   "管理员",
+		IsAdmin:  1,
+		Status:   1,
+	},
+	{
+		Username: "amprobe",
+		Password: "123456",
+		Remark:   "普通用户",
+		IsAdmin:  1,
+		Status:   1,
+	},
+}
 
 var PrepareSet = wire.NewSet(wire.Struct(new(Prepare), "*"))
 
@@ -29,23 +46,8 @@ type Prepare struct {
 }
 
 func (a *Prepare) Init(config *Config) {
-	if !config.InitData.Enable {
-		return
-	}
-	file, err := os.ReadFile(config.InitData.InitConfigFile)
-	if err != nil {
-		slog.Error("read init config file failed", "error", err)
-		return
-	}
-	var prepareData PrepareData
-	err = yaml.Unmarshal(file, &prepareData)
-	if err != nil {
-		slog.Error("init config data unmarshal failed", "error", err)
-		return
-	}
-
-	err = a.db.RunInTransaction(func(tx *gorm.DB) error {
-		for _, u := range prepareData.Users {
+	_ = a.db.RunInTransaction(func(tx *gorm.DB) error {
+		for _, u := range users {
 			var ou model.User
 			// 不存在则创建
 			if err := a.db.Model(&model.User{}).Where("username = ?", u.Username).Take(&ou).Error; err != nil {
@@ -63,17 +65,3 @@ func (a *Prepare) Init(config *Config) {
 		return nil
 	})
 }
-
-type PrepareData struct {
-	Users Users `yaml:"users"`
-}
-
-type User struct {
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Remark   string `yaml:"remark"`
-	IsAdmin  string `yaml:"is_admin"`
-	Status   int    `yaml:"status"`
-}
-
-type Users []*User

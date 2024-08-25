@@ -9,31 +9,28 @@ import (
 )
 
 type Config struct {
-	Fiber    Fiber
-	Rpc      Rpc
-	Gorm     Gorm
-	DB       DB
-	Disk     Disk
-	Task     Task
-	Ethernet Ethernet
-	Logger   Logger
-	Auth     Auth
-	InitData InitData
+	Fiber Fiber
+	Rpc   Rpc
+	Gorm  Gorm
+	DB    DB
+	Task  Task
+	Log   Log
+	Auth  Auth
 }
 
 // NewConfig Load config file (toml/json/yaml)
 func NewConfig(configFile string) (*Config, error) {
 	config := &Config{}
-
+	
 	viper.SetConfigFile(configFile)
-
+	
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, err
 	}
 	if err := viper.Unmarshal(config); err != nil {
 		return nil, err
 	}
-
+	
 	return config, nil
 }
 
@@ -51,7 +48,6 @@ type Rpc struct {
 }
 
 type Gorm struct {
-	GenDoc            bool
 	Debug             bool
 	DBType            string
 	MaxLifetime       int
@@ -70,23 +66,17 @@ type DB struct {
 	SSLMode  string
 }
 
-type Disk struct {
-	Devices []string
-}
-
 type Task struct {
-	Interval int
+	Interval  int
+	Devices   []string
+	Ethernets []string
 }
 
-type Ethernet struct {
-	Names []string
-}
-
-type Logger struct {
-	File         string
-	Level        string
-	RotationTime int
-	MaxAge       int
+type Log struct {
+	Output   string
+	Level    string
+	Rotation int
+	MaxAge   int
 }
 
 type Auth struct {
@@ -96,9 +86,4 @@ type Auth struct {
 	Expired        int
 	RefreshExpired int
 	Prefix         string
-}
-
-type InitData struct {
-	Enable         bool
-	InitConfigFile string
 }

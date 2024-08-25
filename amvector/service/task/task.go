@@ -7,8 +7,6 @@ package task
 import (
 	"time"
 
-	"common/database"
-
 	"github.com/amuluze/docker"
 	"github.com/patrickmn/go-cache"
 )
@@ -22,20 +20,14 @@ const (
 
 type Task struct {
 	interval int
-	db       *database.DB
 	manager  *docker.Manager
-	devices  map[string]struct{}
-	ethernet map[string]struct{}
 	cache    *cache.Cache
 }
 
-func NewTask(interval int, db *database.DB, manager *docker.Manager, dev map[string]struct{}, eth map[string]struct{}) *Task {
+func NewTask(interval int, manager *docker.Manager) *Task {
 	return &Task{
 		interval: interval,
-		db:       db,
 		manager:  manager,
-		devices:  dev,
-		ethernet: eth,
 		cache:    cache.New(5*time.Minute, 60*time.Second),
 	}
 }

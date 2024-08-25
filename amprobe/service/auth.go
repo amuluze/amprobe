@@ -5,14 +5,11 @@
 package service
 
 import (
+	"amprobe/pkg/database"
 	"time"
-
-	"common/database"
-
+	
 	"amprobe/pkg/auth"
-
 	"amprobe/pkg/auth/jwtauth"
-
 	"github.com/golang-jwt/jwt"
 	"github.com/patrickmn/go-cache"
 )

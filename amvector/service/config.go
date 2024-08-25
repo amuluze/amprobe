@@ -16,9 +16,7 @@ type Config struct {
 	prefix    Prefix    `yaml:"-"`
 	Log       Log       `yaml:"log"`
 	Task      Task      `yaml:"task"`
-	DB        DB        `yaml:"db"`
 	Variables Variables `yaml:"variables"`
-	Profile   string    `yaml:"profile"`
 }
 
 func NewConfig(configFile string, prefix Prefix) (*Config, error) {
@@ -38,20 +36,6 @@ func NewConfig(configFile string, prefix Prefix) (*Config, error) {
 	return config, nil
 }
 
-type Task struct {
-	Interval int      `yaml:"interval"`
-	Disk     Disk     `yaml:"disk"`
-	Ethernet Ethernet `yaml:"ethernet"`
-}
-
-type Disk struct {
-	Devices []string `yaml:"devices"`
-}
-
-type Ethernet struct {
-	Names []string `yaml:"names"`
-}
-
 type Log struct {
 	Output   string `yaml:"output"`
 	Level    string `yaml:"level"`
@@ -59,14 +43,8 @@ type Log struct {
 	MaxAge   int    `yaml:"max_age"`
 }
 
-type DB struct {
-	DBType   string `yaml:"dbtype"`
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	DBName   string `yaml:"dbname"`
-	SSLMode  string `yaml:"sslmode"`
+type Task struct {
+	Interval int
 }
 
 type Variables struct {

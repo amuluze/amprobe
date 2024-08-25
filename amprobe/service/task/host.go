@@ -5,11 +5,10 @@
 package task
 
 import (
+	"amprobe/service/model"
 	"amvector/pkg/psutil"
 	"log/slog"
 	"time"
-
-	"amvector/service/model"
 )
 
 func (a *Task) Host(timestamp time.Time) {

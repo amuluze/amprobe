@@ -17,25 +17,9 @@ type Host struct {
 	KernelVersion   string    `json:"kernel_version"`
 }
 
-type HostSummaryArgs struct {
-	Timestamp time.Time `json:"timestamp"`
-}
-
-type HostSummaryReply struct {
-	Data Host `json:"data"`
-}
-
 type CPU struct {
 	Timestamp  time.Time `json:"timestamp"`
 	CPUPercent float64   `json:"cpu_percent"`
-}
-
-type CPUSummaryArgs struct {
-	Timestamp time.Time `json:"timestamp"`
-}
-
-type CPUSummaryReply struct {
-	Data CPU `json:"data"`
 }
 
 type Memory struct {
@@ -43,14 +27,6 @@ type Memory struct {
 	MemPercent float64   `json:"mem_percent"`
 	MemTotal   float64   `json:"mem_total"`
 	MemUsed    float64   `json:"mem_used"`
-}
-
-type MemorySummaryArgs struct {
-	Timestamp time.Time `json:"timestamp"`
-}
-
-type MemorySummaryReply struct {
-	Data Memory `json:"data"`
 }
 
 type Disk struct {
@@ -63,6 +39,37 @@ type Disk struct {
 	DiskWrite   float64   `json:"disk_write"`
 }
 
+type Net struct {
+	Timestamp time.Time `json:"timestamp"`
+	Ethernet  string    `json:"ethernet"`
+	NetRecv   float64   `json:"net_recv"`
+	NetSend   float64   `json:"net_send"`
+}
+
+type HostSummaryArgs struct {
+	Timestamp time.Time `json:"timestamp"`
+}
+
+type HostSummaryReply struct {
+	Data Host `json:"data"`
+}
+
+type CPUSummaryArgs struct {
+	Timestamp time.Time `json:"timestamp"`
+}
+
+type CPUSummaryReply struct {
+	Data CPU `json:"data"`
+}
+
+type MemorySummaryArgs struct {
+	Timestamp time.Time `json:"timestamp"`
+}
+
+type MemorySummaryReply struct {
+	Data Memory `json:"data"`
+}
+
 type DiskSummaryArgs struct {
 	Timestamp time.Time           `json:"timestamp"`
 	Devices   map[string]struct{} `json:"devices"`
@@ -71,13 +78,6 @@ type DiskSummaryArgs struct {
 
 type DiskSummaryReply struct {
 	Data []Disk `json:"data"`
-}
-
-type Net struct {
-	Timestamp time.Time `json:"timestamp"`
-	Ethernet  string    `json:"ethernet"`
-	NetRecv   float64   `json:"net_recv"`
-	NetSend   float64   `json:"net_send"`
 }
 
 type NetSummaryArgs struct {

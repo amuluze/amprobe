@@ -5,19 +5,18 @@
 package task
 
 import (
+	"amprobe/service/model"
 	"context"
 	"encoding/json"
 	"log/slog"
 	"strings"
 	"time"
-
-	"amvector/service/model"
 )
 
 func (a *Task) Container(timestamp time.Time) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-
+	
 	cs, err := a.manager.ListContainer(ctx)
 	if err != nil {
 		slog.Error("failed to list containers", "error", err)
@@ -38,19 +37,19 @@ func (a *Task) Container(timestamp time.Time) {
 		d.Volumes = strings.Join(info.Volumes, ",")
 		d.Environments = strings.Join(info.Environments, ",")
 		d.Labels = string(labels)
-
+		
 		cpuPercent, err := a.manager.GetContainerCpu(ctx, info.ID[:6])
 		if err != nil {
 			slog.Error("failed to get container cpu", "error", err)
 		}
 		d.CPUPercent = cpuPercent
-
+		
 		memPercent, used, limit, err := a.manager.GetContainerMem(ctx, info.ID[:6])
 		if err != nil {
 			slog.Error("failed to get container mem", "error", err)
 		}
 		d.MemPercent = memPercent
-
+		
 		d.MemUsage = used
 		d.MemLimit = limit
 		if _, ok := a.cache.Get(info.Image); !ok {
@@ -70,7 +69,7 @@ func (a *Task) Container(timestamp time.Time) {
 func (a *Task) Docker(timestamp time.Time) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-
+	
 	dockerVersion, err := a.manager.Version(ctx)
 	if err != nil {
 		slog.Error("failed to get docker version", "error", err)
@@ -94,7 +93,7 @@ func (a *Task) Docker(timestamp time.Time) {
 func (a *Task) Image(timestamp time.Time) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-
+	
 	images, err := a.manager.ListImage(ctx)
 	if err != nil {
 		slog.Error("failed to get version", "error", err)
@@ -135,7 +134,7 @@ func (a *Task) Image(timestamp time.Time) {
 func (a *Task) Net(timestamp time.Time) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-
+	
 	nets, err := a.manager.ListNetwork(ctx)
 	if err != nil {
 		slog.Error("failed to get network", "error", err)

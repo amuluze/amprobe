@@ -5,12 +5,7 @@
 package service
 
 import (
-	"fmt"
 	"log/slog"
-
-	"amvector/pkg/profile"
-
-	"amvector/service/container"
 )
 
 func Run(configFile string, prefix Prefix) (func(), error) {
@@ -19,14 +14,10 @@ func Run(configFile string, prefix Prefix) (func(), error) {
 		slog.Error("build injector failed:", "err", err)
 		return nil, err
 	}
-
+	
 	// 初始化日志
 	slog.SetDefault(injector.Logger.Logger)
-
-	// 定时任务
-	timedTask := injector.Task
-	go timedTask.Run()
-
+	
 	// rpc server
 	rpcServer := injector.RPCServer
 	go func() {
@@ -35,37 +26,12 @@ func Run(configFile string, prefix Prefix) (func(), error) {
 			slog.Error("rpc server start failed:", "err", err)
 		}
 	}()
-
-	slog.Info("service profile", "info", fmt.Sprintf("%#v", injector.Config))
-	// Docker 服务管理交由 docker-compose 来做
-	//if err := setupService(injector.Config.Profile); err != nil {
-	//	slog.Error("setup service failed:", "err", err)
-	//}
-
+	
 	return func() {
-		timedTask.Stop()
 		err := rpcServer.Stop()
 		if err != nil {
 			slog.Error("rpc server stop failed:", "err", err)
 		}
 		clearFunc()
 	}, nil
-}
-
-func setupService(serviceProfile string) error {
-	containerManager := container.NewContainerManager()
-	cfg, err := profile.ReadProfile(serviceProfile)
-	if err != nil {
-		slog.Error("read profile failed:", "err", err)
-		return err
-	}
-
-	if err := containerManager.CreateNetwork(cfg.Services.Network); err != nil {
-		return err
-	}
-
-	if err := containerManager.CreateAmprobe(cfg.Services.Amprobe); err != nil {
-		return err
-	}
-	return nil
 }

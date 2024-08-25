@@ -1,30 +1,30 @@
-// Package schema
-// Date: 2024/06/25 00:18:26
+// Package rpc
+// Date: 2022/11/9 10:18
 // Author: Amu
 // Description:
-package schema
+package rpc
 
 type FilesSearchArgs struct {
-	Path string
+	Path string `json:"path"`
 }
 
 type FileInfo struct {
-	Name    string
-	Size    int64
-	Mode    string
-	ModTime int64
-	IsDir   bool
+	Name    string `json:"name"`
+	Size    int64  `json:"size"`
+	Mode    string `json:"mode"`
+	ModTime int64  `json:"mod_time"`
+	IsDir   bool   `json:"is_dir"`
 }
 type FilesSearchReply struct {
-	Files []FileInfo
+	Files []FileInfo `json:"files"`
 }
 
 type DirSizeArgs struct {
-	Path string
+	Path string `json:"path"`
 }
 
 type DirSizeReply struct {
-	Size int64
+	Size int64 `json:"size"`
 }
 
 type FileCreateArgs struct {
@@ -60,5 +60,5 @@ type FileDownloadArgs struct {
 }
 
 type FileDownloadReply struct {
-	Filepath string
+	Filepath string `json:"filepath"`
 }

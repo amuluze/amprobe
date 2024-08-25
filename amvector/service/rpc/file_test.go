@@ -5,7 +5,7 @@
 package rpc
 
 import (
-	"amvector/service/schema"
+	"common/rpc"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -27,8 +27,8 @@ func DirSize(path string) (int64, error) {
 }
 
 func TestFilesSearch(t *testing.T) {
-
-	args := &schema.FilesSearchArgs{
+	
+	args := &rpc.FilesSearchArgs{
 		Path: "/Users/amu",
 	}
 	files, err := os.ReadDir(args.Path)

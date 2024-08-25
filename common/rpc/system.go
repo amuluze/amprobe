@@ -1,8 +1,8 @@
-// Package schema
-// Date: 2024/6/24 09:37
+// Package rpc
+// Date: 2022/11/9 10:18
 // Author: Amu
 // Description:
-package schema
+package rpc
 
 type RebootArgs struct{}
 
@@ -15,11 +15,11 @@ type ShutdownReply struct{}
 type GetDNSArgs struct{}
 
 type GetDNSReply struct {
-	DNS []string
+	DNS []string `json:"dns"`
 }
 
 type SetDNSArgs struct {
-	DNS []string
+	DNS []string `json:"dns"`
 }
 
 type SetDNSReply struct{}
@@ -27,30 +27,29 @@ type SetDNSReply struct{}
 type GetSystemTimeArgs struct{}
 
 type GetSystemTimeReply struct {
-	SystemTime string
+	SystemTime string `json:"system_time"`
 }
 
 type SetSystemTimeArgs struct {
-	SystemTime string
+	SystemTime string `json:"system_time"`
 }
 
 type SetSystemTimeReply struct{}
 
-type GetSystemTimeZoneListArgs struct {
-}
+type GetSystemTimeZoneListArgs struct{}
 
 type GetSystemTimeZoneListReply struct {
-	SystemTimeZoneList []string
+	SystemTimeZoneList []string `json:"system_time_zone_list"`
 }
 
 type GetSystemTimeZoneArgs struct{}
 
 type GetSystemTimeZoneReply struct {
-	SystemTimeZone string
+	SystemTimeZone string `json:"system_time_zone"`
 }
 
 type SetSystemTimeZoneArgs struct {
-	SystemTimeZone string
+	SystemTimeZone string `json:"system_time_zone"`
 }
 
 type SetSystemTimeZoneReply struct{}
@@ -58,11 +57,11 @@ type SetSystemTimeZoneReply struct{}
 type GetDockerRegistryMirrorsArgs struct{}
 
 type GetDockerRegistryMirrorsReply struct {
-	Mirrors []string
+	Mirrors []string `json:"mirrors"`
 }
 
 type SetDockerRegistryMirrorsArgs struct {
-	Mirrors []string
+	Mirrors []string `json:"mirrors"`
 }
 
 type SetDockerRegistryMirrorsReply struct{}

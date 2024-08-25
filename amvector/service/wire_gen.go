@@ -6,10 +6,6 @@
 
 package service
 
-import (
-	"amvector/service/model"
-)
-
 // Injectors from wire.go:
 
 func BuildInjector(configFile string, prefix Prefix) (*Injector, func(), error) {
@@ -17,18 +13,12 @@ func BuildInjector(configFile string, prefix Prefix) (*Injector, func(), error) 
 	if err != nil {
 		return nil, nil, err
 	}
-	models := model.NewModels()
-	db, err := NewDB(config, models)
-	if err != nil {
-		return nil, nil, err
-	}
-	timedTask := NewTimedTask(config, db)
-	server, err := NewRPCServer(config, db)
+	server, err := NewRPCServer(config)
 	if err != nil {
 		return nil, nil, err
 	}
 	logger := NewLogger(config)
-	injector, err := NewInjector(config, timedTask, server, logger)
+	injector, err := NewInjector(config, server, logger)
 	if err != nil {
 		return nil, nil, err
 	}

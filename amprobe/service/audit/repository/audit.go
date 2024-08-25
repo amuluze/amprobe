@@ -6,13 +6,10 @@ package repository
 
 import (
 	"context"
-
-	"common/database"
-
+	
+	"amprobe/pkg/database"
 	"amprobe/service/model"
-
 	"amprobe/service/schema"
-
 	"github.com/google/wire"
 )
 

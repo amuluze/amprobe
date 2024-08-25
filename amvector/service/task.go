@@ -1,5 +1,5 @@
 // Package service
-// Date: 2024/06/10 18:30:23
+// Date: 2024/3/6 13:34
 // Author: Amu
 // Description:
 package service
@@ -7,11 +7,9 @@ package service
 import (
 	"fmt"
 	"time"
-
+	
 	"amvector/service/task"
-
-	"common/database"
-
+	
 	"github.com/amuluze/amutool/timex"
 	"github.com/amuluze/docker"
 )
@@ -22,26 +20,16 @@ type TimedTask struct {
 	stopCh chan struct{}
 }
 
-func NewTimedTask(conf *Config, db *database.DB) *TimedTask {
+func NewTimedTask(conf *Config) *TimedTask {
 	interval := conf.Task.Interval
 	tk := timex.NewTicker(time.Duration(interval) * time.Second)
 	manager, err := docker.NewManager()
 	if err != nil {
 		return nil
 	}
-
-	dev := make(map[string]struct{})
-	for _, d := range conf.Task.Disk.Devices {
-		dev[d] = struct{}{}
-	}
-
-	eth := make(map[string]struct{})
-	for _, d := range conf.Task.Ethernet.Names {
-		eth[d] = struct{}{}
-	}
-
-	newTask := task.NewTask(interval, db, manager, dev, eth)
-
+	
+	newTask := task.NewTask(interval, manager)
+	
 	return &TimedTask{
 		task:   newTask,
 		ticker: tk,
@@ -50,23 +38,7 @@ func NewTimedTask(conf *Config, db *database.DB) *TimedTask {
 }
 
 func (a *TimedTask) Execute() {
-	timestamp := time.Now()
-	// 处理数组指标
-	go a.task.Host(timestamp)
-	go a.task.Cpu(timestamp)
-	go a.task.Memory(timestamp)
-	go a.task.Disk(timestamp)
-	go a.task.Network(timestamp)
 
-	// 处理 Docker 容器指标
-	go a.task.Container(timestamp)
-	go func() {
-		a.task.Docker(timestamp)
-		a.task.Image(timestamp)
-		a.task.Net(timestamp)
-	}()
-
-	//go a.task.ClearOldRecord()
 }
 
 func (a *TimedTask) Run() {
