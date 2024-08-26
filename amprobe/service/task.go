@@ -6,8 +6,11 @@ package service
 
 import (
 	"amprobe/pkg/database"
+	"amprobe/pkg/rpc"
 	"amprobe/service/task"
+	"context"
 	"fmt"
+	"log/slog"
 	"time"
 	
 	"github.com/amuluze/amutool/timex"
@@ -20,7 +23,7 @@ type TimedTask struct {
 	stopCh chan struct{}
 }
 
-func NewTimedTask(conf *Config, db *database.DB) *TimedTask {
+func NewTimedTask(conf *Config, db *database.DB, client *rpc.Client) *TimedTask {
 	interval := conf.Task.Interval
 	tk := timex.NewTicker(time.Duration(interval) * time.Second)
 	manager, err := docker.NewManager()
@@ -38,7 +41,7 @@ func NewTimedTask(conf *Config, db *database.DB) *TimedTask {
 		eth[d] = struct{}{}
 	}
 	
-	newTask := task.NewTask(interval, db, manager, dev, eth)
+	newTask := task.NewTask(interval, db, client, manager, dev, eth)
 	
 	return &TimedTask{
 		task:   newTask,
@@ -49,22 +52,43 @@ func NewTimedTask(conf *Config, db *database.DB) *TimedTask {
 
 func (a *TimedTask) Execute() {
 	timestamp := time.Now()
-	// 处理数组指标
-	go a.task.Host(timestamp)
-	go a.task.Cpu(timestamp)
-	go a.task.Memory(timestamp)
-	go a.task.Disk(timestamp)
-	go a.task.Network(timestamp)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 	
-	// 处理 Docker 容器指标
-	go a.task.Container(timestamp)
+	// 处理 Host 指标
 	go func() {
-		a.task.Docker(timestamp)
-		a.task.Image(timestamp)
-		a.task.Net(timestamp)
+		if err := a.task.HostSummary(ctx, timestamp); err != nil {
+			slog.Error("host summary failed: ", "error", err)
+		}
+		if err := a.task.CPUSummary(ctx, timestamp); err != nil {
+			slog.Error("cpu summary failed: ", "error", err)
+		}
+		if err := a.task.MemorySummary(ctx, timestamp); err != nil {
+			slog.Error("memory summary failed: ", "error", err)
+		}
+		if err := a.task.DiskSummary(ctx, timestamp); err != nil {
+			slog.Error("disk summary failed: ", "error", err)
+		}
+		if err := a.task.NetSummary(ctx, timestamp); err != nil {
+			slog.Error("net summary failed: ", "error", err)
+		}
 	}()
 	
-	//go a.task.ClearOldRecord()
+	// 处理 Docker 容器指标
+	go func() {
+		if err := a.task.DockerSummary(ctx, timestamp); err != nil {
+			slog.Error("docker summary failed", "error", err)
+		}
+		if err := a.task.ContainerSummary(ctx, timestamp); err != nil {
+			slog.Error("containers summary failed", "error", err)
+		}
+		if err := a.task.ImageSummary(ctx, timestamp); err != nil {
+			slog.Error("image summary failed", "error", err)
+		}
+		if err := a.task.NetworkSummary(ctx, timestamp); err != nil {
+			slog.Error("network summary failed", "error", err)
+		}
+	}()
 }
 
 func (a *TimedTask) Run() {

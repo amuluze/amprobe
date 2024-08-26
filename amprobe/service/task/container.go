@@ -6,175 +6,136 @@ package task
 
 import (
 	"amprobe/service/model"
+	rpcSchema "common/rpc"
 	"context"
-	"encoding/json"
 	"log/slog"
-	"strings"
 	"time"
 )
 
-func (a *Task) Container(timestamp time.Time) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	defer cancel()
-	
-	cs, err := a.manager.ListContainer(ctx)
+func (a *Task) DockerSummary(ctx context.Context, timestamp time.Time) error {
+	args := rpcSchema.DockerSummaryArgs{
+		Timestamp: timestamp,
+	}
+	var reply rpcSchema.DockerSummaryReply
+	err := a.rpcClient.Call(ctx, "DockerSummary", args, &reply)
 	if err != nil {
-		slog.Error("failed to list containers", "error", err)
-		return
-	}
-	var containers []model.Container
-	for _, info := range cs {
-		labels, _ := json.Marshal(info.Labels)
-		var d model.Container
-		d.Timestamp = timestamp
-		d.ContainerID = info.ID[:6]
-		d.Name = info.Name
-		d.State = info.State
-		d.Image = info.Image
-		d.Uptime = info.Uptime
-		d.IP = info.IP
-		d.Ports = strings.Join(info.Ports, ",")
-		d.Volumes = strings.Join(info.Volumes, ",")
-		d.Environments = strings.Join(info.Environments, ",")
-		d.Labels = string(labels)
-		
-		cpuPercent, err := a.manager.GetContainerCpu(ctx, info.ID[:6])
-		if err != nil {
-			slog.Error("failed to get container cpu", "error", err)
-		}
-		d.CPUPercent = cpuPercent
-		
-		memPercent, used, limit, err := a.manager.GetContainerMem(ctx, info.ID[:6])
-		if err != nil {
-			slog.Error("failed to get container mem", "error", err)
-		}
-		d.MemPercent = memPercent
-		
-		d.MemUsage = used
-		d.MemLimit = limit
-		if _, ok := a.cache.Get(info.Image); !ok {
-			a.cache.Set(info.Image, 1, 2*time.Minute)
-		} else {
-			count, err := a.cache.IncrementInt(info.Image, 1)
-			slog.Info("container image cache", "image", info.Image, "count", count, "error", err)
-		}
-		containers = append(containers, d)
-	}
-	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Container{}).Error; err != nil {
-		slog.Error("failed to delete container", "error", err)
-	}
-	a.db.Model(&model.Container{}).Create(&containers)
-}
-
-func (a *Task) Docker(timestamp time.Time) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	defer cancel()
-	
-	dockerVersion, err := a.manager.Version(ctx)
-	if err != nil {
-		slog.Error("failed to get docker version", "error", err)
-		return
+		return err
 	}
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Docker{}).Error; err != nil {
-		slog.Error("failed to delete docker container", "error", err)
+		slog.Warn("failed to clear docker summary", "error", err)
 	}
-	a.db.Model(&model.Docker{}).Create(&model.Docker{
+	if err := a.db.Model(&model.Docker{}).Create(&model.Docker{
 		Timestamp:     timestamp,
-		DockerVersion: dockerVersion.DockerVersion,
-		APIVersion:    dockerVersion.APIVersion,
-		MinAPIVersion: dockerVersion.MinAPIVersion,
-		GitCommit:     dockerVersion.GitCommit,
-		GoVersion:     dockerVersion.GoVersion,
-		Os:            dockerVersion.OS,
-		Arch:          dockerVersion.Arch,
-	})
+		DockerVersion: reply.Data.DockerVersion,
+		APIVersion:    reply.Data.APIVersion,
+		MinAPIVersion: reply.Data.MinAPIVersion,
+		GitCommit:     reply.Data.GitCommit,
+		GoVersion:     reply.Data.GoVersion,
+		Os:            reply.Data.Os,
+		Arch:          reply.Data.Arch,
+	}).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
-func (a *Task) Image(timestamp time.Time) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	defer cancel()
-	
-	images, err := a.manager.ListImage(ctx)
-	if err != nil {
-		slog.Error("failed to get version", "error", err)
-		return
+func (a *Task) ContainerSummary(ctx context.Context, timestamp time.Time) error {
+	args := rpcSchema.ContainerSummaryArgs{
+		Timestamp: timestamp,
 	}
-	var list model.Images
-	duplicateImage := make(map[string]struct{})
-	for _, im := range images {
-		val, ok := a.cache.Get(im.Name + ":" + im.Tag)
-		if !ok {
-			slog.Error("failed to get image cache", "error", err)
-			val = 0
-		}
-		if _, ok := duplicateImage[im.ID]; !ok {
-			duplicateImage[im.ID] = struct{}{}
-		} else {
-			if im.Tag != "latest" {
-				continue
-			}
-		}
-		list = append(list, model.Image{
-			Timestamp: timestamp,
-			ImageID:   im.ID[7:19],
-			Name:      im.Name,
-			Number:    val.(int),
-			Tag:       im.Tag,
-			Created:   im.Created,
-			Size:      im.Size,
+	var reply rpcSchema.ContainerSummaryReply
+	err := a.rpcClient.Call(ctx, "ContainerSummary", args, &reply)
+	if err != nil {
+		return err
+	}
+	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Container{}).Error; err != nil {
+		slog.Warn("failed to clear container summary", "error", err)
+	}
+	var containers []model.Container
+	for _, item := range reply.Data {
+		containers = append(containers, model.Container{
+			Timestamp:    timestamp,
+			ContainerID:  item.ContainerID,
+			Name:         item.Name,
+			Image:        item.Image,
+			Network:      item.Network,
+			IP:           item.IP,
+			Ports:        item.Ports,
+			State:        item.State,
+			Uptime:       item.Uptime,
+			Volumes:      item.Volumes,
+			Environments: item.Environments,
+			Commands:     item.Commands,
+			Labels:       item.Labels,
+			CPUPercent:   item.CPUPercent,
+			MemPercent:   item.MemPercent,
+			MemUsage:     item.MemUsage,
+			MemLimit:     item.MemLimit,
 		})
-		a.cache.Delete(im.Name + ":" + im.Tag)
+	}
+	if err := a.db.Model(&model.Container{}).Create(&containers).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *Task) ImageSummary(ctx context.Context, timestamp time.Time) error {
+	args := rpcSchema.ImageSummaryArgs{
+		Timestamp: timestamp,
+	}
+	var reply rpcSchema.ImageSummaryReply
+	err := a.rpcClient.Call(ctx, "ImageSummary", args, &reply)
+	if err != nil {
+		return err
 	}
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Image{}).Error; err != nil {
-		slog.Error("failed to delete image", "error", err)
+		slog.Warn("failed to clear image summary", "error", err)
 	}
-	a.db.Model(&model.Image{}).Create(&list)
-}
-
-func (a *Task) Net(timestamp time.Time) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-	defer cancel()
-	
-	nets, err := a.manager.ListNetwork(ctx)
-	if err != nil {
-		slog.Error("failed to get network", "error", err)
-		return
-	}
-	var list model.Networks
-	for _, net := range nets {
-		subnet := ""
-		gateway := ""
-		labels, _ := json.Marshal(net.Labels)
-		if len(net.SubNet) > 0 {
-			subnet = net.SubNet[0].Subnet
-			gateway = net.SubNet[0].Gateway
-		}
-		list = append(list, model.Network{
+	var images []model.Image
+	for _, image := range reply.Data {
+		images = append(images, model.Image{
 			Timestamp: timestamp,
-			NetworkID: net.ID,
-			Name:      net.Name,
-			Driver:    net.Driver,
-			Created:   net.Created,
-			Scope:     net.Scope,
-			Internal:  net.Internal,
-			Subnet:    subnet,
-			Gateway:   gateway,
-			Labels:    string(labels),
+			ImageID:   image.ImageID,
+			Name:      image.Name,
+			Tag:       image.Tag,
+			Created:   image.Created,
+			Size:      image.Size,
 		})
 	}
-	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Network{}).Error; err != nil {
-		slog.Error("failed to delete network", "error", err)
+	if err := a.db.Model(&model.Image{}).Create(&images).Error; err != nil {
+		return err
 	}
-	a.db.Model(&model.Network{}).Create(&list)
+	return nil
 }
 
-func (a *Task) ClearOldRecord() {
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Minute*5)).Delete(&model.Host{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Minute*5)).Delete(&model.Container{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Minute*5)).Delete(&model.Image{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Minute*5)).Delete(&model.Docker{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Hour*24*2)).Delete(&model.CPU{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Hour*24*2)).Delete(&model.Memory{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Hour*24*2)).Delete(&model.Disk{})
-	a.db.Where("timestamp < ?", time.Now().Add(-time.Hour*24*2)).Delete(&model.Net{})
+func (a *Task) NetworkSummary(ctx context.Context, timestamp time.Time) error {
+	args := rpcSchema.NetworkSummaryArgs{
+		Timestamp: timestamp,
+	}
+	var reply rpcSchema.NetworkSummaryReply
+	err := a.rpcClient.Call(ctx, "NetworkSummary", args, &reply)
+	if err != nil {
+		return err
+	}
+	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Network{}).Error; err != nil {
+		slog.Warn("failed to clear network summary", "error", err)
+	}
+	var networks []model.Network
+	for _, item := range reply.Data {
+		networks = append(networks, model.Network{
+			Timestamp: timestamp,
+			NetworkID: item.NetworkID,
+			Name:      item.Name,
+			Driver:    item.Driver,
+			Created:   item.Created,
+			Internal:  item.Internal,
+			Subnet:    item.Subnet,
+			Gateway:   item.Gateway,
+			Labels:    item.Labels,
+		})
+	}
+	if err := a.db.Model(&model.Network{}).Create(&networks).Error; err != nil {
+		return err
+	}
+	return nil
 }

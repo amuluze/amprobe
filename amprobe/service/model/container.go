@@ -6,7 +6,7 @@ package model
 
 import (
 	"time"
-
+	
 	"gorm.io/gorm"
 )
 
@@ -29,6 +29,7 @@ type Container struct {
 	MemLimit     float64   `json:"mem_limit"`
 	Volumes      string    `json:"volumes"`
 	Environments string    `json:"environments"`
+	Commands     string    `json:"commands"`
 	Labels       string    `json:"labels"`
 }
 
