@@ -7,7 +7,6 @@ require (
 	github.com/amuluze/amutool/timex v0.0.0-20240821104128-caed9cc0d402
 	github.com/amuluze/docker v0.0.0-20240816152853-43a001dd2bf9
 	github.com/docker/docker v27.1.2+incompatible
-	github.com/docker/libcompose v0.4.0
 	github.com/google/wire v0.6.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
@@ -17,7 +16,6 @@ require (
 	github.com/takama/daemon v1.0.0
 	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/gorm v1.25.11
 )
 
 require (
@@ -31,6 +29,7 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
+	github.com/docker/libcompose v0.4.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/flynn/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
@@ -47,8 +46,6 @@ require (
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jamiealquiza/tachymeter v2.0.0+incompatible // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/julienschmidt/httprouter v1.3.0 // indirect
 	github.com/kavu/go_reuseport v1.5.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
