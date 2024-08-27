@@ -8,14 +8,17 @@ import (
 	"github.com/spf13/viper"
 )
 
+type ModeConf string
+
 type Config struct {
-	Fiber Fiber
-	Rpc   Rpc
-	Gorm  Gorm
-	DB    DB
-	Task  Task
-	Log   Log
-	Auth  Auth
+	Fiber  Fiber
+	Rpc    Rpc
+	Gorm   Gorm
+	DB     DB
+	Task   Task
+	Log    Log
+	Auth   Auth
+	Casbin Casbin
 }
 
 // NewConfig Load config file (toml/json/yaml)
@@ -86,4 +89,8 @@ type Auth struct {
 	Expired        int
 	RefreshExpired int
 	Prefix         string
+}
+
+type Casbin struct {
+	Enable bool
 }

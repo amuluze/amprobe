@@ -8,9 +8,11 @@ import (
 	"amprobe/pkg/database"
 	"amprobe/pkg/utils/hash"
 	"amprobe/service/model"
+	"github.com/casbin/casbin/v2"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
-
+	"log/slog"
+	
 	"github.com/google/wire"
 )
 
@@ -46,7 +48,8 @@ var users = []*model.User{
 }
 
 type Prepare struct {
-	db *database.DB
+	db       *database.DB
+	enforcer *casbin.SyncedEnforcer
 }
 
 type NamePolicy struct {
@@ -63,7 +66,7 @@ type GroupPolicy struct {
 func (a *Prepare) Init(app *fiber.App) {
 	// init account
 	a.InitAccount(app)
-
+	
 	// init casbin rules
 	a.InitCasbinRules()
 }
@@ -71,7 +74,7 @@ func (a *Prepare) Init(app *fiber.App) {
 func (a *Prepare) InitAccount(app *fiber.App) {
 	var getResources []*model.Resource
 	var postResources []*model.Resource
-
+	
 	for _, routers := range app.Stack() {
 		for _, router := range routers {
 			postResources = append(postResources, &model.Resource{
@@ -90,7 +93,10 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 			}
 		}
 	}
-
+	
+	slog.Info("get resources", "resources", getResources)
+	slog.Info("post resources", "resources", postResources)
+	
 	_ = a.db.RunInTransaction(func(tx *gorm.DB) error {
 		for _, u := range users {
 			for _, role := range u.Roles {
@@ -113,4 +119,23 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 	})
 }
 
-func (a *Prepare) InitCasbinRules() {}
+func (a *Prepare) InitCasbinRules() {
+	var users []*model.User
+	if err := a.db.Preload("Role").Preload("Resource").Find(&users).Error; err != nil {
+		slog.Error("get all users error", "error", err)
+		return
+	}
+	
+	for _, user := range users {
+		for _, role := range user.Roles {
+			if _, err := a.enforcer.AddNamedGroupingPolicy("g", user.ID, role.ID); err != nil {
+				slog.Error("add grouping policy error", "error", err)
+			}
+			for _, resource := range role.Resources {
+				if _, err := a.enforcer.AddNamedPolicy("p", role.ID, resource.Path, resource.Method); err != nil {
+					slog.Error("add policy error", "error", err)
+				}
+			}
+		}
+	}
+}

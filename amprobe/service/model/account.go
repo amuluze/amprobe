@@ -21,6 +21,7 @@ type User struct {
 	IsAdmin   int       `gorm:"default:'0';comment:是否是管理员('1':是 '0':否)"`
 	Status    int       `gorm:"index;default:0;comment:状态(1:启用 0:停用)"`
 	Roles     Roles     `gorm:"many2many:sys_user_roles;"`
+	Resources Resources `gorm:"many2many:sys_user_resources;"`
 }
 
 func (a User) TableName() string {

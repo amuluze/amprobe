@@ -12,12 +12,13 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
+	
 	"github.com/gofiber/fiber/v2"
 )
 
 type options struct {
 	ConfigFile string
+	ModelFile  ModeConf
 }
 
 type Option func(*options)
@@ -25,6 +26,12 @@ type Option func(*options)
 func SetConfigFile(s string) Option {
 	return func(o *options) {
 		o.ConfigFile = s
+	}
+}
+
+func SetModelFile(s string) Option {
+	return func(o *options) {
+		o.ModelFile = ModeConf(s)
 	}
 }
 
@@ -38,7 +45,7 @@ func InitHttpServer(ctx context.Context, config *Config, app *fiber.App) func() 
 			panic(err)
 		}
 	}()
-
+	
 	return func() {
 		_, cancel := context.WithTimeout(ctx, time.Second*time.Duration(appConfig.ShutdownTimeout))
 		defer cancel()
@@ -53,21 +60,26 @@ func Init(ctx context.Context, opts ...Option) (func(), error) {
 	for _, opt := range opts {
 		opt(&o)
 	}
-	injector, cleanFunc, err := BuildInjector(o.ConfigFile)
+	injector, cleanFunc, err := BuildInjector(o.ConfigFile, o.ModelFile)
 	if err != nil {
 		slog.Error("build injector failed", "err", err)
 		return nil, err
 	}
-
+	
 	// 初始化日志
 	slog.SetDefault(injector.Logger.Logger)
-
+	
 	// 初始化预设数据
-	injector.Prepare.Init(injector.Config)
-
+	injector.Prepare.Init(injector.App)
+	
+	// 定时任务
+	timedTask := injector.Task
+	go timedTask.Run()
+	
 	httpServerCleanFunc := InitHttpServer(ctx, injector.Config, injector.App)
-
+	
 	return func() {
+		timedTask.Stop()
 		httpServerCleanFunc()
 		cleanFunc()
 	}, nil
@@ -94,7 +106,7 @@ EXIT:
 			break EXIT
 		}
 	}
-
+	
 	cleanFunc()
 	time.Sleep(time.Second)
 	os.Exit(state)
