@@ -6,8 +6,9 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"strings"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type SkipperFunc func(c *fiber.Ctx) bool

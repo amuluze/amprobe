@@ -19,9 +19,11 @@ func (a *Task) HostSummary(ctx context.Context, timestamp time.Time) error {
 	if err := a.rpcClient.Call(ctx, "HostSummary", args, &reply); err != nil {
 		return err
 	}
+
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Host{}).Error; err != nil {
 		return err
 	}
+
 	if err := a.db.Model(&model.Host{}).Create(&model.Host{
 		Timestamp:       timestamp,
 		Uptime:          reply.Data.Uptime,
@@ -45,6 +47,7 @@ func (a *Task) CPUSummary(ctx context.Context, timestamp time.Time) error {
 	if err := a.rpcClient.Call(ctx, "CPUSummary", args, &reply); err != nil {
 		return err
 	}
+
 	if err := a.db.Model(&model.CPU{}).Create(&model.CPU{
 		Timestamp:  timestamp,
 		CPUPercent: reply.Data.CPUPercent,
@@ -62,6 +65,7 @@ func (a *Task) MemorySummary(ctx context.Context, timestamp time.Time) error {
 	if err := a.rpcClient.Call(ctx, "MemorySummary", args, &reply); err != nil {
 		return err
 	}
+
 	if err := a.db.Model(&model.Memory{}).Create(&model.Memory{
 		Timestamp:  timestamp,
 		MemPercent: reply.Data.MemPercent,
@@ -84,6 +88,7 @@ func (a *Task) DiskSummary(ctx context.Context, timestamp time.Time) error {
 	if err := a.rpcClient.Call(ctx, "DiskSummary", args, &reply); err != nil {
 		return err
 	}
+
 	var infos []model.Disk
 	for _, item := range reply.Data {
 		infos = append(infos, model.Disk{
@@ -115,6 +120,7 @@ func (a *Task) NetSummary(ctx context.Context, timestamp time.Time) error {
 	if err := a.rpcClient.Call(ctx, "NetSummary", args, &reply); err != nil {
 		return err
 	}
+
 	var infos []model.Net
 	for _, item := range reply.Data {
 		infos = append(infos, model.Net{

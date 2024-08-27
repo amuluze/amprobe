@@ -8,12 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"common/database"
-
 	"amprobe/pkg/auth"
-
+	"amprobe/pkg/database"
 	"amprobe/service/model"
-
 	"github.com/golang-jwt/jwt"
 )
 

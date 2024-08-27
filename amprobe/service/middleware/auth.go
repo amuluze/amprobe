@@ -13,7 +13,6 @@ import (
 	"amprobe/pkg/fiberx"
 	"amprobe/service/schema"
 
-	"github.com/amuluze/amutool/errors"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -34,33 +33,29 @@ func UserAuthMiddleware(a auth.Auther, skippers ...SkipperFunc) fiber.Handler {
 			return c.Next()
 		}
 
-		slog.Info("auth middleware", "token", fiberx.GetToken(c))
+		slog.Info("auth middleware", "auth token", fiberx.GetToken(c))
 		var userID string
 		var username string
 		var isAdmin string
 		var err error
 		userID, username, isAdmin, err = a.ParseToken(fiberx.GetToken(c), "access_token")
-
-		if errors.Is(err, auth.ErrInvalidToken) {
-			slog.Error("invalid token", "err", err)
-			return fiberx.Unauthorized(c)
-		} else if err != nil {
-			slog.Error("logout failed", "error", err)
+		if err != nil {
+			slog.Error("parse token failed", "error", err)
 			return fiberx.Unauthorized(c)
 		}
 
-		slog.Info("user id", "user_id", userID)
 		wrapUserAuthContext(c, userID, username)
+		// FIXME: 这里仅是一个简单的权限控制方案，禁止非管理员用户放完 post 方法
 		if c.Method() == "POST" && isAdmin != "1" && c.Path() != "/v1/auth/logout" {
 			return fiberx.Forbidden(c)
 		}
-		if err := c.Next(); err == nil {
+
+		err = c.Next()
+		if err == nil {
 			if (c.Method() == "POST" && isAdmin == "1") || c.Path() == "/v1/auth/logout" {
 				a.RecordAudit(username, OperateEvent[c.Path()])
 			}
-			return nil
-		} else {
-			return fiberx.Failure(c, err)
 		}
+		return err
 	}
 }

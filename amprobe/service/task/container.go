@@ -21,6 +21,7 @@ func (a *Task) DockerSummary(ctx context.Context, timestamp time.Time) error {
 	if err != nil {
 		return err
 	}
+
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Docker{}).Error; err != nil {
 		slog.Warn("failed to clear docker summary", "error", err)
 	}
@@ -48,9 +49,11 @@ func (a *Task) ContainerSummary(ctx context.Context, timestamp time.Time) error 
 	if err != nil {
 		return err
 	}
+
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Container{}).Error; err != nil {
 		slog.Warn("failed to clear container summary", "error", err)
 	}
+
 	var containers []model.Container
 	for _, item := range reply.Data {
 		containers = append(containers, model.Container{
@@ -88,6 +91,7 @@ func (a *Task) ImageSummary(ctx context.Context, timestamp time.Time) error {
 	if err != nil {
 		return err
 	}
+
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Image{}).Error; err != nil {
 		slog.Warn("failed to clear image summary", "error", err)
 	}
@@ -117,6 +121,7 @@ func (a *Task) NetworkSummary(ctx context.Context, timestamp time.Time) error {
 	if err != nil {
 		return err
 	}
+
 	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Network{}).Error; err != nil {
 		slog.Warn("failed to clear network summary", "error", err)
 	}

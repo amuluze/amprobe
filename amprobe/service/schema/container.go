@@ -83,11 +83,11 @@ type ContainerStopArgs struct {
 
 type ContainerStopReply struct{}
 
-type ContainerRemoveArgs struct {
+type ContainerDeleteArgs struct {
 	ContainerID string `json:"container_id" validate:"required"`
 }
 
-type ContainerRemoveReply struct{}
+type ContainerDeleteReply struct{}
 
 type ContainerRestartArgs struct {
 	ContainerID string `json:"container_id" validate:"required"`
@@ -147,11 +147,18 @@ type ImageExportRPCArgs struct {
 
 type ImageExportReply struct{}
 
-type ImageRemoveArgs struct {
+type ImageDeleteArgs struct {
 	ImageID string `json:"image_id" validate:"required"`
 }
 
-type ImageRemoveReply struct{}
+type ImageDeleteReply struct{}
+
+type ImageTagArgs struct {
+	OldTag string `json:"old_tag"`
+	NewTag string `json:"new_tag"`
+}
+
+type ImageTagReply struct{}
 
 type ImageCountArgs struct{}
 

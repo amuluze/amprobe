@@ -5,13 +5,10 @@
 package api
 
 import (
+	"amprobe/pkg/errors"
 	"amprobe/pkg/fiberx"
-	"log/slog"
-
 	"amprobe/pkg/validatex"
-
 	"amprobe/service/audit/service"
-
 	"amprobe/service/schema"
 
 	"github.com/gofiber/fiber/v2"
@@ -30,17 +27,16 @@ func (a *AuditAPI) AuditQuery(ctx *fiber.Ctx) error {
 
 	var args schema.AuditQueryArgs
 	if err := fiberx.ParseQuery(ctx, &args); err != nil {
-		fiberx.Failure(ctx, err)
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
 
-	slog.Info("audit query", "args", args)
 	if err := validatex.ValidateStruct(&args); err != nil {
-		return fiberx.Failure(ctx, err)
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
-	slog.Info("audit query validate", "args", args)
+
 	audits, err := a.AuditService.AuditQuery(c, &args)
 	if err != nil {
-		return fiberx.Failure(ctx, err)
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
 	return fiberx.Success(ctx, audits)
 }

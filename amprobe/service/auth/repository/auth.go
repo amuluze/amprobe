@@ -6,7 +6,7 @@ package repository
 
 import (
 	"context"
-	
+
 	"amprobe/pkg/database"
 	"amprobe/pkg/utils/hash"
 	"amprobe/service/model"
@@ -40,7 +40,7 @@ func (a *AuthRepo) Login(ctx context.Context, args *schema.LoginArgs) (*model.Us
 		if user.Password != hash.SHA1String(args.Password) {
 			return errors.New("invalid password")
 		}
-		
+
 		return nil
 	})
 	if err != nil {
@@ -55,9 +55,11 @@ func (a *AuthRepo) PassUpdate(ctx context.Context, args *schema.PasswordUpdateAr
 		if err := tx.Where("username = ?", args.Username).First(&user).Error; err != nil {
 			return err
 		}
+
 		if user.Password != hash.SHA1String(args.OldPassword) {
 			return errors.New("invalid password")
 		}
+
 		if err := tx.Where("username = ?", args.Username).Update("password", hash.SHA1String(args.OldPassword)).Error; err != nil {
 			return err
 		}

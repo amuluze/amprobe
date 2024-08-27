@@ -6,11 +6,10 @@ package service
 
 import (
 	"context"
-	
+
 	"amprobe/service/audit/repository"
 	"amprobe/service/schema"
-	
-	"github.com/amuluze/amutool/errors"
+
 	"github.com/google/wire"
 )
 
@@ -31,9 +30,9 @@ func NewAuditService(repo repository.IAuditRepo) *AuditService {
 func (a AuditService) AuditQuery(ctx context.Context, args *schema.AuditQueryArgs) (*schema.AuditQueryReply, error) {
 	audits, err := a.AuditRepo.AuditQuery(ctx, args)
 	if err != nil {
-		return &schema.AuditQueryReply{}, errors.New400Error(err.Error())
+		return &schema.AuditQueryReply{}, err
 	}
-	
+
 	var list []schema.Audit
 	for _, audit := range audits {
 		list = append(list, schema.Audit{
@@ -43,6 +42,9 @@ func (a AuditService) AuditQuery(ctx context.Context, args *schema.AuditQueryArg
 			Created:  audit.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
-	total, _ := a.AuditRepo.AuditCount(ctx)
+	total, err := a.AuditRepo.AuditCount(ctx)
+	if err != nil {
+		return &schema.AuditQueryReply{}, err
+	}
 	return &schema.AuditQueryReply{Data: list, Total: total, Page: args.Page, Size: args.Size}, nil
 }

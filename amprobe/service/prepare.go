@@ -7,61 +7,110 @@ package service
 import (
 	"amprobe/pkg/database"
 	"amprobe/pkg/utils/hash"
-	"amprobe/pkg/utils/uuid"
 	"amprobe/service/model"
-	
-	"github.com/google/wire"
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
+
+	"github.com/google/wire"
 )
 
-type User struct {
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Remark   string `yaml:"remark"`
-	IsAdmin  int    `yaml:"is_admin"`
-	Status   int    `yaml:"status"`
-}
+var PrepareSet = wire.NewSet(wire.Struct(new(Prepare), "*"))
 
-var users = []User{
+var users = []*model.User{
 	{
 		Username: "admin",
 		Password: "admin123",
-		Remark:   "管理员",
+		Remark:   "",
 		IsAdmin:  1,
 		Status:   1,
+		Roles: []*model.Role{
+			{
+				Name:   "管理员",
+				Status: 1,
+			},
+		},
 	},
 	{
 		Username: "amprobe",
 		Password: "123456",
-		Remark:   "普通用户",
+		Remark:   "",
 		IsAdmin:  1,
 		Status:   1,
+		Roles: []*model.Role{
+			{
+				Name:   "普通用户",
+				Status: 1,
+			},
+		},
 	},
 }
-
-var PrepareSet = wire.NewSet(wire.Struct(new(Prepare), "*"))
 
 type Prepare struct {
 	db *database.DB
 }
 
-func (a *Prepare) Init(config *Config) {
+type NamePolicy struct {
+	RoleID string
+	Path   string
+	Method string
+}
+
+type GroupPolicy struct {
+	UserID string
+	RoleID string
+}
+
+func (a *Prepare) Init(app *fiber.App) {
+	// init account
+	a.InitAccount(app)
+
+	// init casbin rules
+	a.InitCasbinRules()
+}
+
+func (a *Prepare) InitAccount(app *fiber.App) {
+	var getResources []*model.Resource
+	var postResources []*model.Resource
+
+	for _, routers := range app.Stack() {
+		for _, router := range routers {
+			postResources = append(postResources, &model.Resource{
+				Name:   router.Name,
+				Path:   router.Path,
+				Method: router.Method,
+				Status: 1,
+			})
+			if router.Method == "GET" || router.Name == "登录" || router.Name == "登出" || router.Name == "更新密码" || router.Name == "更新 token" {
+				getResources = append(getResources, &model.Resource{
+					Name:   router.Name,
+					Path:   router.Path,
+					Method: router.Method,
+					Status: 1,
+				})
+			}
+		}
+	}
+
 	_ = a.db.RunInTransaction(func(tx *gorm.DB) error {
 		for _, u := range users {
+			for _, role := range u.Roles {
+				if role.Name == "管理员" {
+					role.Resources = postResources
+				} else {
+					role.Resources = getResources
+				}
+			}
 			var ou model.User
 			// 不存在则创建
 			if err := a.db.Model(&model.User{}).Where("username = ?", u.Username).Take(&ou).Error; err != nil {
-				a.db.Create(&model.User{
-					ID:       uuid.MustUUID(),
-					Username: u.Username,
-					Password: hash.SHA1String(u.Password),
-					Status:   u.Status,
-					IsAdmin:  u.IsAdmin,
-				})
+				a.db.Create(u)
+			} else {
+				// 存在则更新
+				a.db.Model(&model.User{}).Where("username = ?", u.Username).Updates(model.User{Password: hash.SHA1String(u.Password), Status: u.Status, IsAdmin: u.IsAdmin})
 			}
-			// 存在则更新
-			a.db.Model(&model.User{}).Where("username = ?", u.Username).Updates(model.User{Password: hash.SHA1String(u.Password), Status: u.Status, IsAdmin: u.IsAdmin})
 		}
 		return nil
 	})
 }
+
+func (a *Prepare) InitCasbinRules() {}

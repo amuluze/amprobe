@@ -5,8 +5,8 @@
 package jwtauth
 
 import (
+	"amprobe/pkg/errors"
 	"fmt"
-	"github.com/amuluze/amutool/errors"
 	"github.com/patrickmn/go-cache"
 	"time"
 )

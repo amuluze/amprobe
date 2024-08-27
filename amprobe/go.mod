@@ -7,6 +7,7 @@ require (
 	github.com/amuluze/amutool/logger v0.0.0-20240821104128-caed9cc0d402
 	github.com/amuluze/amutool/timex v0.0.0-20240821104128-caed9cc0d402
 	github.com/amuluze/docker v0.0.0-20240816152853-43a001dd2bf9
+	github.com/casbin/casbin/v2 v2.98.0
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/gofiber/contrib/websocket v1.3.2
@@ -15,6 +16,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
+	github.com/pkg/errors v0.9.1
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/smallnest/rpcx v1.8.31
 	github.com/spf13/viper v1.19.0
@@ -34,6 +36,7 @@ require (
 	github.com/akutz/memconn v0.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/apache/thrift v0.20.0 // indirect
+	github.com/casbin/govaluate v1.2.0 // indirect
 	github.com/cenk/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -100,7 +103,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/quic-go/quic-go v0.43.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect

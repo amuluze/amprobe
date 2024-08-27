@@ -8,6 +8,7 @@ import (
 	"amprobe/pkg/auth"
 	"context"
 	"log/slog"
+	"strconv"
 
 	"amprobe/service/auth/repository"
 
@@ -39,12 +40,12 @@ func (a *AuthService) Login(ctx context.Context, args *schema.LoginArgs) (*schem
 	u, err := a.AuthRepo.Login(ctx, args)
 	if err != nil {
 		slog.Error("auth repo login failed", "error", err)
-		return nil, errors.New400Error(err.Error())
+		return nil, err
 	}
-	tokenInfo, err := a.Auth.GenerateToken(u.ID.String(), u.Username, u.IsAdmin)
+	tokenInfo, err := a.Auth.GenerateToken(u.ID.String(), u.Username, strconv.Itoa(u.IsAdmin))
 	if err != nil {
 		slog.Error("generate token failed", "error", err)
-		return nil, errors.New400Error(err.Error())
+		return nil, err
 	}
 	res := &schema.LoginResult{
 		AccessToken:  tokenInfo.GetAccessToken(),
@@ -58,7 +59,7 @@ func (a *AuthService) Logout(ctx context.Context, userID, token string) error {
 		err := a.Auth.DestroyToken(token)
 		if err != nil {
 			slog.Error("destroy token failed", "error", err)
-			return errors.New400Error(err.Error())
+			return err
 		}
 	}
 	return nil
@@ -67,12 +68,12 @@ func (a *AuthService) Logout(ctx context.Context, userID, token string) error {
 func (a *AuthService) PassUpdate(ctx context.Context, args *schema.PasswordUpdateArgs) error {
 	if args.OldPassword == args.NewPassword {
 		slog.Error("old password equal new password")
-		return errors.New400Error("equal password")
+		return errors.New("equal password")
 	}
 	err := a.AuthRepo.PassUpdate(ctx, args)
 	if err != nil {
 		slog.Error("auth pass update failed", "error", err)
-		return errors.New400Error(err.Error())
+		return err
 	}
 	return nil
 }
@@ -81,13 +82,13 @@ func (a *AuthService) TokenUpdate(ctx context.Context, token string) (*schema.Lo
 	userID, username, isAdmin, err := a.Auth.ParseToken(token, "refresh_token")
 	if err != nil {
 		slog.Error("parse token failed", "error", err)
-		return nil, errors.New400Error(err.Error())
+		return nil, err
 	}
-	slog.Info("token update", "user_id", userID)
+
 	tokenInfo, err := a.Auth.GenerateToken(userID, username, isAdmin)
 	if err != nil {
 		slog.Error("generate new token failed", "error", err)
-		return nil, errors.New400Error(err.Error())
+		return nil, err
 	}
 
 	res := &schema.LoginResult{
