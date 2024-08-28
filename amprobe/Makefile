@@ -20,7 +20,7 @@ bin: clear
 .PHONY: clear
 # clear extra file
 clear:
-	@rm @{APP}
+	@rm ${APP}
 
 .PHONY: wire
 # generate wire
