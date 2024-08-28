@@ -1,15 +1,7 @@
-FROM golang:1.21 AS build
-COPY . /app/amprobe
-ENV GO111MODULE="on" \
-    GOPROXY=https://goproxy.cn,direct
-
-RUN cd /app/amprobe && \
-    go build -a -tags netgo -o /app/amprobe/amprobe ./cmd/amprobe
-
 FROM ubuntu:22.04
 WORKDIR /app
 
-COPY --from=build /app/amprobe/amprobe /app/
+COPY ./amprobe /app/
 
 RUN apt update && \
     apt install -y nginx && \

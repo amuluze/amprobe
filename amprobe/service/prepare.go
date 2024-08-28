@@ -7,12 +7,14 @@ package service
 import (
 	"amprobe/pkg/database"
 	"amprobe/pkg/utils/hash"
+	"amprobe/pkg/utils/uuid"
 	"amprobe/service/model"
+	"log/slog"
+
 	"github.com/casbin/casbin/v2"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
-	"log/slog"
-	
+
 	"github.com/google/wire"
 )
 
@@ -20,6 +22,7 @@ var PrepareSet = wire.NewSet(wire.Struct(new(Prepare), "*"))
 
 var users = []*model.User{
 	{
+		ID:       uuid.MustUUID(),
 		Username: "admin",
 		Password: "admin123",
 		Remark:   "",
@@ -27,12 +30,14 @@ var users = []*model.User{
 		Status:   1,
 		Roles: []*model.Role{
 			{
+				ID:     uuid.MustUUID(),
 				Name:   "管理员",
 				Status: 1,
 			},
 		},
 	},
 	{
+		ID:       uuid.MustUUID(),
 		Username: "amprobe",
 		Password: "123456",
 		Remark:   "",
@@ -40,6 +45,7 @@ var users = []*model.User{
 		Status:   1,
 		Roles: []*model.Role{
 			{
+				ID:     uuid.MustUUID(),
 				Name:   "普通用户",
 				Status: 1,
 			},
@@ -66,7 +72,7 @@ type GroupPolicy struct {
 func (a *Prepare) Init(app *fiber.App) {
 	// init account
 	a.InitAccount(app)
-	
+
 	// init casbin rules
 	a.InitCasbinRules()
 }
@@ -74,10 +80,11 @@ func (a *Prepare) Init(app *fiber.App) {
 func (a *Prepare) InitAccount(app *fiber.App) {
 	var getResources []*model.Resource
 	var postResources []*model.Resource
-	
+
 	for _, routers := range app.Stack() {
 		for _, router := range routers {
 			postResources = append(postResources, &model.Resource{
+				ID:     uuid.MustUUID(),
 				Name:   router.Name,
 				Path:   router.Path,
 				Method: router.Method,
@@ -85,6 +92,7 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 			})
 			if router.Method == "GET" || router.Name == "登录" || router.Name == "登出" || router.Name == "更新密码" || router.Name == "更新 token" {
 				getResources = append(getResources, &model.Resource{
+					ID:     uuid.MustUUID(),
 					Name:   router.Name,
 					Path:   router.Path,
 					Method: router.Method,
@@ -93,10 +101,10 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 			}
 		}
 	}
-	
+
 	slog.Info("get resources", "resources", getResources)
 	slog.Info("post resources", "resources", postResources)
-	
+
 	_ = a.db.RunInTransaction(func(tx *gorm.DB) error {
 		for _, u := range users {
 			for _, role := range u.Roles {
@@ -125,7 +133,7 @@ func (a *Prepare) InitCasbinRules() {
 		slog.Error("get all users error", "error", err)
 		return
 	}
-	
+
 	for _, user := range users {
 		for _, role := range user.Roles {
 			if _, err := a.enforcer.AddNamedGroupingPolicy("g", user.ID, role.ID); err != nil {
