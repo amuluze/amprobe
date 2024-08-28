@@ -28,11 +28,11 @@ type DockerCompose struct {
 					MaxFile string `yaml:"max-file" default:"10"`
 				} `yaml:"options"`
 			} `yaml:"logging"`
-			Ports       []string `yaml:"ports" default:"[127.0.0.1:80:80,127.0.0.1:8000:8000]"`
+			Ports       []string `yaml:"ports" default:"[127.0.0.1:80:80,127.0.0.1:443:443]"`
 			Environment struct {
 				CreatedByProbe string `yaml:"CREATED_BY_PROBE" default:"true"`
 			} `yaml:"environment"`
-			Volumes  []string `yaml:"volumes" default:"[/data/amprobe/resources/amprobe/configs:/app/configs,/data/amprobe/resources/amprobe/nginx/nginx.conf:/etc/nginx/nginx.conf,/data/amprobe/resources/amvector/socks/vector.sock:/app/vector.sock,/var/run/docker.sock:/var/run/docker.sock,/tmp:/tmp]"`
+			Volumes  []string `yaml:"volumes" default:"[/var/run/docker.sock:/var/run/docker.sock,/tmp:/tmp]"`
 			Networks struct {
 				AppNet struct {
 					Ipv4Address string `yaml:"ipv4_address" default:"172.18.0.2"`
@@ -65,6 +65,15 @@ func DockerComposeConfig() DockerCompose {
 	dockerCompose.Networks.Amprobe.Ipam.Config = subnet
 
 	// 动态参数替换
+	volumes := []string{
+		"/data/amprobe/resources/amprobe/configs:/app/configs",
+		"/data/amprobe/resources/amprobe/nginx:/etc/nginx",
+		"/data/amprobe/resources/amvector/socks/vector.sock:/app/vector.sock",
+	}
+	dockerCompose.Services.Amprobe.Volumes = append(
+		dockerCompose.Services.Amprobe.Volumes,
+		volumes...,
+	)
 
 	return dockerCompose
 }
