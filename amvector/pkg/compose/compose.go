@@ -71,8 +71,8 @@ func DockerComposeConfig() DockerCompose {
 		"/data/amprobe/resources/amvector/socks/vector.sock:/app/vector.sock",
 	}
 	dockerCompose.Services.Amprobe.Volumes = append(
-		dockerCompose.Services.Amprobe.Volumes,
-		volumes...,
+		volumes,
+		dockerCompose.Services.Amprobe.Volumes...,
 	)
 
 	return dockerCompose

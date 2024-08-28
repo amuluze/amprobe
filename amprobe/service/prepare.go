@@ -9,6 +9,7 @@ import (
 	"amprobe/pkg/utils/hash"
 	"amprobe/pkg/utils/uuid"
 	"amprobe/service/model"
+	"gorm.io/gorm/clause"
 	"log/slog"
 
 	"github.com/casbin/casbin/v2"
@@ -129,18 +130,22 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 
 func (a *Prepare) InitCasbinRules() {
 	var users []*model.User
-	if err := a.db.Preload("Role").Preload("Resource").Find(&users).Error; err != nil {
+	if err := a.db.Preload(clause.Associations).Preload("Roles").Find(&users).Error; err != nil {
 		slog.Error("get all users error", "error", err)
 		return
 	}
 
 	for _, user := range users {
 		for _, role := range user.Roles {
-			if _, err := a.enforcer.AddNamedGroupingPolicy("g", user.ID, role.ID); err != nil {
+			if _, err := a.enforcer.AddNamedGroupingPolicy("g", user.ID.String(), role.ID.String()); err != nil {
 				slog.Error("add grouping policy error", "error", err)
 			}
-			for _, resource := range role.Resources {
-				if _, err := a.enforcer.AddNamedPolicy("p", role.ID, resource.Path, resource.Method); err != nil {
+			var roleResources model.Role
+			if err := a.db.Where("id = ?", role.ID).Preload("Resources").Find(&roleResources).Error; err != nil {
+				slog.Error("get role resources error", "error", err)
+			}
+			for _, resource := range roleResources.Resources {
+				if _, err := a.enforcer.AddNamedPolicy("p", role.ID.String(), resource.Path, resource.Method); err != nil {
 					slog.Error("add policy error", "error", err)
 				}
 			}
