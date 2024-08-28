@@ -14,8 +14,13 @@ dev:
 
 .PHONY: bin
 # build bin
-bin:
+bin: clear
 	$(GO) build -o $(APP) $(SERVER)
+
+.PHONY: clear
+# clear extra file
+clear:
+	@rm @{APP}
 
 .PHONY: wire
 # generate wire
@@ -24,13 +29,13 @@ wire:
 
 .PHONY: amd64
 # docker amd64 image
-amd64:
+amd64: bin
 	# docker build -t $(IMAGE):$(TAG) -f ./Dockerfile.amd .
 	docker buildx build --platform linux/amd64 -t $(IMAGE):$(TAG) -o type=docker .
 
 .PHONY: arm64ls
 # docker arm64 image
-arm64:
+arm64: bin
 	# docker build -t $(IMAGE):$(TAG) -f ./Dockerfile.arm .
 	docker buildx build --platform linux/arm64 -t $(IMAGE):$(TAG) -o type=docker .
 

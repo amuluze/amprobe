@@ -11,8 +11,8 @@ RUN apt update && \
     chmod +x /app/amprobe
 
 COPY ./configs /app/configs
-COPY ./dist /usr/share/nginx/html/app
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./dist /app/web
+COPY ./nginx /etc/nginx
 COPY ./supervisor /etc/supervisor/conf.d
 
 # 这里有点坑，不加 -n 服务启动不了
