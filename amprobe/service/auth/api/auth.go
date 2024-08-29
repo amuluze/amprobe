@@ -11,6 +11,8 @@ import (
 	"amprobe/pkg/validatex"
 	"amprobe/service/auth/service"
 	"amprobe/service/schema"
+	"log/slog"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -29,7 +31,7 @@ func (a *AuthAPI) Login(ctx *fiber.Ctx) error {
 	if err := fiberx.ParseBody(ctx, &args); err != nil {
 		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
-
+	slog.Info("login args", "args", args)
 	if err := validatex.ValidateStruct(args); err != nil {
 		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}

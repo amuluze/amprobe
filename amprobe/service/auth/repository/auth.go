@@ -6,11 +6,13 @@ package repository
 
 import (
 	"context"
+	"log/slog"
 
 	"amprobe/pkg/database"
 	"amprobe/pkg/utils/hash"
 	"amprobe/service/model"
 	"amprobe/service/schema"
+
 	"github.com/amuluze/amutool/errors"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -38,6 +40,7 @@ func (a *AuthRepo) Login(ctx context.Context, args *schema.LoginArgs) (*model.Us
 			return err
 		}
 		if user.Password != hash.SHA1String(args.Password) {
+			slog.Info("hash password", "password", hash.SHA1String(args.Password))
 			return errors.New("invalid password")
 		}
 
