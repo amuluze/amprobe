@@ -5,9 +5,10 @@
 package compose
 
 import (
+	"os"
+
 	"github.com/mcuadros/go-defaults"
 	"gopkg.in/yaml.v3"
-	"os"
 )
 
 type Config struct {
@@ -16,7 +17,6 @@ type Config struct {
 }
 
 type DockerCompose struct {
-	Version  string `yaml:"version" default:"2.4"`
 	Services struct {
 		Amprobe struct {
 			Image         string `yaml:"image" default:"amuluze/amprobe:latest"`
@@ -28,7 +28,7 @@ type DockerCompose struct {
 					MaxFile string `yaml:"max-file" default:"10"`
 				} `yaml:"options"`
 			} `yaml:"logging"`
-			Ports       []string `yaml:"ports" default:"[127.0.0.1:80:80,127.0.0.1:443:443]"`
+			Ports       []string `yaml:"ports" default:"[80:80,443:443]"`
 			Environment struct {
 				CreatedByProbe string `yaml:"CREATED_BY_PROBE" default:"true"`
 			} `yaml:"environment"`
@@ -70,7 +70,7 @@ func DockerComposeConfig() DockerCompose {
 		"/data/amprobe/resources/amprobe/nginx/nginx.conf:/etc/nginx/nginx.conf",
 		"/data/amprobe/resources/amprobe/nginx/conf.d:/etc/nginx/conf.d",
 		"/data/amprobe/resources/amvector/socks/vector.sock:/app/vector.sock",
-		"/data/amprobe/logs/amprobe:/app/amprobe",
+		"/data/amprobe/logs/amprobe:/app/logs",
 	}
 	dockerCompose.Services.Amprobe.Volumes = append(
 		volumes,
