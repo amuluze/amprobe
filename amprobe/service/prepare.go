@@ -25,7 +25,7 @@ var users = []*model.User{
 	{
 		ID:       uuid.MustUUID(),
 		Username: "admin",
-		Password: "admin123",
+		Password: hash.SHA1String("admin123"), // hash.SHA1String(args.OldPassword)
 		Remark:   "",
 		IsAdmin:  1,
 		Status:   1,
@@ -40,7 +40,7 @@ var users = []*model.User{
 	{
 		ID:       uuid.MustUUID(),
 		Username: "amprobe",
-		Password: "123456",
+		Password: hash.SHA1String("123456"),
 		Remark:   "",
 		IsAdmin:  1,
 		Status:   1,
