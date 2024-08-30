@@ -8,6 +8,7 @@ import (
 	"amprobe/pkg/contextx"
 	"amprobe/pkg/errors"
 	"amprobe/pkg/fiberx"
+	"log/slog"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gofiber/fiber/v2"
@@ -23,7 +24,8 @@ func CasbinMiddleware(enforcer *casbin.SyncedEnforcer, skippers ...SkipperFunc) 
 		path := c.Path()
 		method := c.Method()
 		userID := contextx.FromUserID(ctx)
-		// requests := []interface{}{userID, path, method}
+
+		slog.Info("casbin middleware", "userID", userID, "path", path, "method", method)
 		if enforces, err := enforcer.Enforce(userID, path, method); err != nil {
 			return fiberx.Failure(c, errors.New400Error(err.Error()))
 		} else if !enforces {
