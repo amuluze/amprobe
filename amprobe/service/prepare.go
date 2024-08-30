@@ -121,7 +121,7 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 				a.db.Create(u)
 			} else {
 				// 存在则更新
-				a.db.Model(&model.User{}).Where("username = ?", u.Username).Updates(model.User{Password: hash.SHA1String(u.Password), Status: u.Status, IsAdmin: u.IsAdmin})
+				a.db.Model(&model.User{}).Where("username = ?", u.Username).Updates(model.User{Password: u.Password, Status: u.Status, IsAdmin: u.IsAdmin})
 			}
 		}
 		return nil
