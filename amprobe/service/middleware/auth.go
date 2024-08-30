@@ -18,7 +18,7 @@ import (
 
 func wrapUserAuthContext(c *fiber.Ctx, userID string, username string) {
 	ctx := contextx.NewUserID(c.UserContext(), userID)
-	ctx = contextx.NewUsername(c.UserContext(), username)
+	ctx = contextx.NewUsername(ctx, username)
 	c.SetUserContext(ctx)
 }
 
@@ -33,7 +33,6 @@ func UserAuthMiddleware(a auth.Auther, skippers ...SkipperFunc) fiber.Handler {
 			return c.Next()
 		}
 
-		slog.Info("auth middleware", "auth token", fiberx.GetToken(c))
 		var userID string
 		var username string
 		var isAdmin string
