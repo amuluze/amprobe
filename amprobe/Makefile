@@ -33,7 +33,7 @@ amd64: bin
 	# docker build -t $(IMAGE):$(TAG) -f ./Dockerfile.amd .
 	docker buildx build --platform linux/amd64 -t $(IMAGE):$(TAG) -o type=docker .
 
-.PHONY: arm64ls
+.PHONY: arm64
 # docker arm64 image
 arm64: bin
 	# docker build -t $(IMAGE):$(TAG) -f ./Dockerfile.arm .
