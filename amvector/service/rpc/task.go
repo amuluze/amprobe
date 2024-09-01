@@ -39,6 +39,7 @@ func (s *Service) ContainerSummary(ctx context.Context, args rpc.ContainerSummar
 		labels, _ := json.Marshal(info.Labels)
 		container := rpc.Container{
 			Timestamp:    args.Timestamp,
+			ContainerID:  info.ID,
 			Name:         info.Name,
 			State:        info.State,
 			Image:        info.Image,
@@ -56,7 +57,7 @@ func (s *Service) ContainerSummary(ctx context.Context, args rpc.ContainerSummar
 		containers = append(containers, container)
 	}
 	reply.Data = containers
-	
+
 	return nil
 }
 

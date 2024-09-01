@@ -58,7 +58,7 @@ func (a *Task) ContainerSummary(ctx context.Context, timestamp time.Time) error 
 	for _, item := range reply.Data {
 		containers = append(containers, model.Container{
 			Timestamp:    timestamp,
-			ContainerID:  item.ContainerID,
+			ContainerID:  item.ContainerID[:6],
 			Name:         item.Name,
 			Image:        item.Image,
 			Network:      item.Network,
@@ -99,7 +99,7 @@ func (a *Task) ImageSummary(ctx context.Context, timestamp time.Time) error {
 	for _, image := range reply.Data {
 		images = append(images, model.Image{
 			Timestamp: timestamp,
-			ImageID:   image.ImageID,
+			ImageID:   image.ImageID[:6],
 			Name:      image.Name,
 			Tag:       image.Tag,
 			Created:   image.Created,
@@ -129,7 +129,7 @@ func (a *Task) NetworkSummary(ctx context.Context, timestamp time.Time) error {
 	for _, item := range reply.Data {
 		networks = append(networks, model.Network{
 			Timestamp: timestamp,
-			NetworkID: item.NetworkID,
+			NetworkID: item.NetworkID[:6],
 			Name:      item.Name,
 			Driver:    item.Driver,
 			Created:   item.Created,

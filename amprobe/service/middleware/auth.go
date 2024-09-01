@@ -33,6 +33,7 @@ func UserAuthMiddleware(a auth.Auther, skippers ...SkipperFunc) fiber.Handler {
 			return c.Next()
 		}
 
+		slog.Debug("auth middleware", "token", fiberx.GetToken(c))
 		var userID string
 		var username string
 		var isAdmin string

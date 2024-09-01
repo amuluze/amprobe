@@ -83,6 +83,7 @@ func (a *Task) DiskSummary(ctx context.Context, timestamp time.Time) error {
 	args := rpcSchema.DiskSummaryArgs{
 		Timestamp: timestamp,
 		Devices:   a.devices,
+		Interval:  a.interval,
 	}
 	var reply rpcSchema.DiskSummaryReply
 	if err := a.rpcClient.Call(ctx, "DiskSummary", args, &reply); err != nil {
@@ -115,6 +116,7 @@ func (a *Task) NetSummary(ctx context.Context, timestamp time.Time) error {
 	args := rpcSchema.NetSummaryArgs{
 		Timestamp: timestamp,
 		Ethernets: a.ethernet,
+		Interval:  a.interval,
 	}
 	var reply rpcSchema.NetSummaryReply
 	if err := a.rpcClient.Call(ctx, "NetSummary", args, &reply); err != nil {

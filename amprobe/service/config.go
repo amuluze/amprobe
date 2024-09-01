@@ -24,16 +24,16 @@ type Config struct {
 // NewConfig Load config file (toml/json/yaml)
 func NewConfig(configFile string) (*Config, error) {
 	config := &Config{}
-	
+
 	viper.SetConfigFile(configFile)
-	
+
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, err
 	}
 	if err := viper.Unmarshal(config); err != nil {
 		return nil, err
 	}
-	
+
 	return config, nil
 }
 
@@ -92,5 +92,8 @@ type Auth struct {
 }
 
 type Casbin struct {
-	Enable bool
+	Enable           bool
+	Debug            bool
+	AutoLoad         bool
+	AutoLoadInternal int
 }

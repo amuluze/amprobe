@@ -9,8 +9,9 @@ import (
 	"amprobe/pkg/utils/hash"
 	"amprobe/pkg/utils/uuid"
 	"amprobe/service/model"
-	"gorm.io/gorm/clause"
 	"log/slog"
+
+	"gorm.io/gorm/clause"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/gofiber/fiber/v2"
@@ -84,44 +85,35 @@ func (a *Prepare) InitAccount(app *fiber.App) {
 
 	for _, routers := range app.Stack() {
 		for _, router := range routers {
-			postResources = append(postResources, &model.Resource{
+			resource := &model.Resource{
 				ID:     uuid.MustUUID(),
 				Name:   router.Name,
 				Path:   router.Path,
 				Method: router.Method,
 				Status: 1,
-			})
+			}
+			postResources = append(postResources, resource)
 			if router.Method == "GET" || router.Name == "登录" || router.Name == "登出" || router.Name == "更新密码" || router.Name == "更新 token" {
-				getResources = append(getResources, &model.Resource{
-					ID:     uuid.MustUUID(),
-					Name:   router.Name,
-					Path:   router.Path,
-					Method: router.Method,
-					Status: 1,
-				})
+				getResources = append(getResources, resource)
 			}
 		}
 	}
 
-	slog.Info("get resources", "resources", getResources)
-	slog.Info("post resources", "resources", postResources)
-
 	_ = a.db.RunInTransaction(func(tx *gorm.DB) error {
 		for _, u := range users {
-			for _, role := range u.Roles {
-				if role.Name == "管理员" {
-					role.Resources = postResources
-				} else {
-					role.Resources = getResources
-				}
+			if u.Username == "admin" {
+				u.Roles[0].Resources = postResources
+			} else {
+				u.Roles[0].Resources = getResources
 			}
+
 			var ou model.User
 			// 不存在则创建
 			if err := a.db.Model(&model.User{}).Where("username = ?", u.Username).Take(&ou).Error; err != nil {
 				a.db.Create(u)
 			} else {
 				// 存在则更新
-				a.db.Model(&model.User{}).Where("username = ?", u.Username).Updates(model.User{Password: u.Password, Status: u.Status, IsAdmin: u.IsAdmin})
+				a.db.Model(&model.User{}).Where("username = ?", u.Username).Updates(model.User{Password: u.Password, Status: u.Status, IsAdmin: u.IsAdmin, Roles: u.Roles, Remark: u.Remark})
 			}
 		}
 		return nil

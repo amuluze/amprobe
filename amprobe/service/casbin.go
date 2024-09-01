@@ -7,8 +7,9 @@ package service
 import (
 	"log/slog"
 	"time"
-	
+
 	"amprobe/pkg/database"
+
 	"github.com/casbin/casbin/v2"
 	gormAdapter "github.com/casbin/gorm-adapter/v3"
 )
@@ -32,26 +33,29 @@ func InitAdapter(db *database.DB) *gormAdapter.Adapter {
 	return adapter
 }
 
-func InitCasbin(modelPath ModeConf, adapter *gormAdapter.Adapter) (*casbin.SyncedEnforcer, func(), error) {
+func InitCasbin(config *Config, modelPath ModeConf, adapter *gormAdapter.Adapter) (*casbin.SyncedEnforcer, func(), error) {
 	cleanFunc := func() {}
-	
+
 	e, err := casbin.NewSyncedEnforcer(string(modelPath))
 	if err != nil {
 		slog.Error("init casbin error", "error", err)
 		return nil, cleanFunc, err
 	}
-	e.EnableLog(true)
+
+	e.EnableLog(config.Casbin.Debug)
 	err = e.InitWithModelAndAdapter(e.GetModel(), adapter)
 	if err != nil {
 		slog.Error("init casbin error", "error", err)
 		return nil, cleanFunc, err
 	}
-	e.EnableEnforce(true)
-	
-	e.StartAutoLoadPolicy(time.Duration(60) * time.Second)
-	cleanFunc = func() {
-		e.StopAutoLoadPolicy()
+	e.EnableEnforce(config.Casbin.Enable)
+
+	if config.Casbin.AutoLoad {
+		e.StartAutoLoadPolicy(time.Duration(config.Casbin.AutoLoadInternal) * time.Second)
+		cleanFunc = func() {
+			e.StopAutoLoadPolicy()
+		}
 	}
-	
+
 	return e, cleanFunc, nil
 }

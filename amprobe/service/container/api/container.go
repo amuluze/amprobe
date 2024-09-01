@@ -326,6 +326,7 @@ func (a *ContainerAPI) GetDockerRegistryMirrors(ctx *fiber.Ctx) error {
 	res, err := a.ContainerService.GetDockerRegistryMirrors(c, args)
 
 	if err != nil {
+		slog.Error("get docker registry mirrors failed", "err", err)
 		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
 	return fiberx.Success(ctx, res)

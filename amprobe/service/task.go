@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"log/slog"
 	"time"
-	
+
 	"github.com/amuluze/amutool/timex"
 	"github.com/amuluze/docker"
 )
@@ -30,19 +30,19 @@ func NewTimedTask(conf *Config, db *database.DB, client *rpc.Client) *TimedTask 
 	if err != nil {
 		return nil
 	}
-	
+
 	dev := make(map[string]struct{})
 	for _, d := range conf.Task.Devices {
 		dev[d] = struct{}{}
 	}
-	
+
 	eth := make(map[string]struct{})
 	for _, d := range conf.Task.Ethernets {
 		eth[d] = struct{}{}
 	}
-	
+
 	newTask := task.NewTask(interval, db, client, manager, dev, eth)
-	
+
 	return &TimedTask{
 		task:   newTask,
 		ticker: tk,
@@ -52,9 +52,9 @@ func NewTimedTask(conf *Config, db *database.DB, client *rpc.Client) *TimedTask 
 
 func (a *TimedTask) Execute() {
 	timestamp := time.Now()
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	
+	// ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	// defer cancel()
+	ctx := context.TODO()
 	// 处理 Host 指标
 	go func() {
 		if err := a.task.HostSummary(ctx, timestamp); err != nil {
@@ -73,7 +73,7 @@ func (a *TimedTask) Execute() {
 			slog.Error("net summary failed: ", "error", err)
 		}
 	}()
-	
+
 	// 处理 Docker 容器指标
 	go func() {
 		if err := a.task.DockerSummary(ctx, timestamp); err != nil {
