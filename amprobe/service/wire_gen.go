@@ -51,9 +51,6 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 		cleanup()
 		return nil, nil, err
 	}
-	containerRepo := repository.NewContainerRepo(db)
-	containerService := service.NewContainerService(containerRepo)
-	containerAPI := api.NewContainerAPI(containerService)
 	client, err := NewRPCClient(config)
 	if err != nil {
 		cleanup3()
@@ -61,6 +58,9 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 		cleanup()
 		return nil, nil, err
 	}
+	containerRepo := repository.NewContainerRepo(db, client)
+	containerService := service.NewContainerService(containerRepo)
+	containerAPI := api.NewContainerAPI(containerService)
 	hostRepo := repository2.NewHostRepo(db, client)
 	hostService := service2.NewHostService(hostRepo)
 	hostAPI := api2.NewHostAPI(hostService)
