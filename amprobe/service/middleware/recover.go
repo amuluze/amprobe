@@ -5,19 +5,25 @@
 package middleware
 
 import (
+	"encoding/json"
+	"log/slog"
 	"runtime"
 
+	"github.com/amuluze/amutool/errors"
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-var defaultStackTraceBufLen = 2048
+var defaultStackTraceBufLen = 4096
 
 func StackTraceHandler(c *fiber.Ctx, e interface{}) {
 	buf := make([]byte, defaultStackTraceBufLen)
-	buf = buf[:runtime.Stack(buf, true)]
-	_, _ = c.Write(buf)
+	slog.Error("e", "err", e)
+	buf = buf[:runtime.Stack(buf, false)]
+	slog.Error("recorver stack trace", "buf", string(buf), "err", e)
+	data, _ := json.Marshal(errors.ErrInternalServer)
+	_, _ = c.Write(data)
 }
 
 var StackMiddleware = recover.New(recover.Config{

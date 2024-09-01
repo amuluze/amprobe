@@ -9,12 +9,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log/slog"
 	"os"
 	"time"
-	
+
 	"amvector/pkg/timectl"
 	"amvector/pkg/utils"
-	
+
 	"github.com/docker/docker/libnetwork/resolvconf"
 )
 
@@ -117,6 +118,7 @@ func (s *Service) GetDockerRegistryMirrors(ctx context.Context, args rpc.GetDock
 	if err := json.Unmarshal(file, &daemonMap); err != nil {
 		return err
 	}
+	slog.Info("docker registry mirrors", "mirrors", daemonMap)
 	if _, ok := daemonMap["registry-mirrors"]; ok {
 		for _, val := range daemonMap["registry-mirrors"].([]interface{}) {
 			reply.Mirrors = append(reply.Mirrors, val.(string))

@@ -6,11 +6,13 @@ package repository
 
 import (
 	"context"
+	"log/slog"
 
 	"amprobe/pkg/database"
 	"amprobe/pkg/rpc"
 	"amprobe/service/model"
 	"amprobe/service/schema"
+
 	"github.com/google/wire"
 
 	rpcSchema "common/rpc"
@@ -53,8 +55,8 @@ type ContainerRepo struct {
 	RPCClient *rpc.Client
 }
 
-func NewContainerRepo(db *database.DB) *ContainerRepo {
-	return &ContainerRepo{DB: db}
+func NewContainerRepo(db *database.DB, client *rpc.Client) *ContainerRepo {
+	return &ContainerRepo{DB: db, RPCClient: client}
 }
 
 func (a *ContainerRepo) Version(ctx context.Context) (model.Docker, error) {
@@ -196,8 +198,10 @@ func (a *ContainerRepo) NetworkDelete(ctx context.Context, args rpcSchema.Networ
 }
 
 func (a *ContainerRepo) GetDockerRegistryMirrors(ctx context.Context, args rpcSchema.GetDockerRegistryMirrorsArgs) (rpcSchema.GetDockerRegistryMirrorsReply, error) {
-	var reply rpcSchema.GetDockerRegistryMirrorsReply
+	reply := rpcSchema.GetDockerRegistryMirrorsReply{Mirrors: []string{}}
+	slog.Info("===>", "args", args, "reply", reply, "client", a.RPCClient)
 	err := a.RPCClient.Call(ctx, "GetDockerRegistryMirrors", args, &reply)
+	slog.Info("===>", "reply", reply, "error", err)
 	return reply, err
 }
 
