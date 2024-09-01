@@ -45,7 +45,7 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 		return nil, nil, err
 	}
 	adapter := InitAdapter(db)
-	syncedEnforcer, cleanup3, err := InitCasbin(modelFile, adapter)
+	syncedEnforcer, cleanup3, err := InitCasbin(config, modelFile, adapter)
 	if err != nil {
 		cleanup2()
 		cleanup()
