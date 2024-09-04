@@ -7,6 +7,9 @@
 package service
 
 import (
+	api5 "amprobe/service/account/api"
+	repository5 "amprobe/service/account/repository"
+	service5 "amprobe/service/account/service"
 	api4 "amprobe/service/audit/api"
 	repository4 "amprobe/service/audit/repository"
 	service4 "amprobe/service/audit/service"
@@ -70,6 +73,9 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 	auditRepo := repository4.NewAuditRepo(db)
 	auditService := service4.NewAuditService(auditRepo)
 	auditAPI := api4.NewAuditAPI(auditService)
+	accountRepository := repository5.NewAccountRepository(db)
+	accountService := service5.NewAccountService(accountRepository)
+	accountAPI := api5.NewAccountAPI(accountService)
 	loggerHandler := NewLoggerHandler()
 	termHandler := NewTermHandler()
 	router := &Router{
@@ -80,6 +86,7 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 		hostAPI:        hostAPI,
 		authAPI:        authAPI,
 		auditAPI:       auditAPI,
+		accountAPI:     accountAPI,
 		loggerHandler:  loggerHandler,
 		termHandler:    termHandler,
 	}

@@ -31,7 +31,7 @@ type AccountService struct {
 	AccountRepository repository.IAccountRepository
 }
 
-func NewAccountService(accountRepository repository.IAccountRepository) IAccountService {
+func NewAccountService(accountRepository repository.IAccountRepository) *AccountService {
 	return &AccountService{AccountRepository: accountRepository}
 }
 

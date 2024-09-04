@@ -32,7 +32,7 @@ type AccountRepository struct {
 	DB *database.DB
 }
 
-func NewAccountRepository(db *database.DB) IAccountRepository {
+func NewAccountRepository(db *database.DB) *AccountRepository {
 	return &AccountRepository{DB: db}
 }
 
