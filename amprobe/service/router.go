@@ -7,20 +7,20 @@ package service
 import (
 	"amprobe/pkg/auth"
 	"github.com/casbin/casbin/v2"
-	
+
 	"amprobe/service/middleware"
-	
+
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
-	
+
 	"github.com/google/wire"
-	
+
 	auditAPI "amprobe/service/audit/api"
-	
+
 	authAPI "amprobe/service/auth/api"
-	
+
 	containerAPI "amprobe/service/container/api"
-	
+
 	hostAPI "amprobe/service/host/api"
 )
 
@@ -37,12 +37,12 @@ type Router struct {
 	config         *Config
 	auth           auth.Auther
 	CasbinEnforcer *casbin.SyncedEnforcer
-	
+
 	containerAPI *containerAPI.ContainerAPI
 	hostAPI      *hostAPI.HostAPI
 	authAPI      *authAPI.AuthAPI
 	auditAPI     *auditAPI.AuditAPI
-	
+
 	loggerHandler *LoggerHandler
 	termHandler   *TermHandler
 }
@@ -59,7 +59,7 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 	})
 	app.Get("/ws/:id", websocket.New(a.loggerHandler.Handler))
 	app.Get("/ws", websocket.New(a.termHandler.Handler))
-	
+
 	if a.config.Auth.Enable {
 		app.Use(middleware.UserAuthMiddleware(
 			a.auth,
@@ -68,7 +68,7 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 			middleware.AllowPathPrefixSkipper("/v1/auth/token_update"),
 		))
 	}
-	
+
 	if a.config.Casbin.Enable {
 		app.Use(middleware.CasbinMiddleware(
 			a.CasbinEnforcer,
@@ -77,7 +77,7 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 			middleware.AllowPathPrefixSkipper("/v1/auth/token_update"),
 		))
 	}
-	
+
 	v1 := app.Group("v1")
 	{
 		gIndex := v1.Group("index")
@@ -86,15 +86,37 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 				return c.SendString("hello world")
 			})
 		}
-		
+
+		gUser := v1.Group("user")
+		{
+			gUser.Get("/user_query")
+			gUser.Post("/user_create")
+			gUser.Post("/user_update")
+			gUser.Post("/user_delete")
+		}
+
+		gRole := v1.Group("role")
+		{
+			gRole.Get("role_query")
+			gRole.Post("/role_create")
+			gRole.Post("/role_update")
+			gRole.Post("/role_delete")
+		}
+
+		gResource := v1.Group("resource")
+		{
+			gResource.Get("/resource_query")
+		}
+
 		gAuth := v1.Group("auth")
 		{
 			gAuth.Post("/login", a.authAPI.Login).Name("登录")
 			gAuth.Post("/logout", a.authAPI.Logout).Name("登出")
 			gAuth.Post("/pass_update", a.authAPI.PassUpdate).Name("更新密码")
 			gAuth.Post("/token_update", a.authAPI.TokenUpdate).Name("更新 token")
+			gAuth.Get("/user_info", a.authAPI.UserInfo).Name("用户信息")
 		}
-		
+
 		gContainer := v1.Group("container")
 		{
 			gContainer.Get("/version", a.containerAPI.Version).Name("获取 Docker 版本信息")
@@ -116,7 +138,7 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 			gContainer.Get("/get_docker_registry_mirrors", a.containerAPI.GetDockerRegistryMirrors).Name("获取 Docker 镜像设置")
 			gContainer.Post("/set_docker_registry_mirrors", a.containerAPI.SetDockerRegistryMirrors).Name("更新 Docker 镜像设置")
 		}
-		
+
 		gHost := v1.Group("host")
 		{
 			gHost.Get("/host_info", a.hostAPI.HostInfo).Name("获取主机信息")
@@ -143,13 +165,13 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 			gHost.Post("/reboot", a.hostAPI.Reboot).Name("重启系统")
 			gHost.Post("/shutdown", a.hostAPI.Shutdown).Name("关闭系统")
 		}
-		
+
 		gAudit := v1.Group("audit")
 		{
 			gAudit.Get("/query", a.auditAPI.AuditQuery).Name("获取审计日志")
 		}
 	}
-	
+
 }
 
 func (a *Router) Register(app *fiber.App) error {

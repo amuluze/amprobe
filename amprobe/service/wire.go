@@ -4,6 +4,7 @@
 package service
 
 import (
+	"amprobe/service/account"
 	"amprobe/service/audit"
 	"amprobe/service/auth"
 	"amprobe/service/container"
@@ -27,6 +28,7 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 		model.Set,
 		auth.Set,
 		audit.Set,
+		account.Set,
 		NewLoggerHandler,
 		NewTermHandler,
 		RouterSet,

@@ -83,3 +83,13 @@ func (a *AuthAPI) TokenUpdate(ctx *fiber.Ctx) error {
 	}
 	return fiberx.Success(ctx, res)
 }
+
+func (a *AuthAPI) UserInfo(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	userID := contextx.FromUserID(c)
+	if res, err := a.AuthService.UserInfo(c, userID); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	} else {
+		return fiberx.Success(ctx, res)
+	}
+}

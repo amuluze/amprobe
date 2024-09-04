@@ -25,6 +25,7 @@ type IAuthService interface {
 	Logout(ctx context.Context, userID, token string) error
 	PassUpdate(ctx context.Context, args *schema.PasswordUpdateArgs) error
 	TokenUpdate(ctx context.Context, token string) (*schema.LoginResult, error)
+	UserInfo(ctx context.Context, userID string) (*schema.UserInfo, error)
 }
 
 type AuthService struct {
@@ -97,4 +98,16 @@ func (a *AuthService) TokenUpdate(ctx context.Context, token string) (*schema.Lo
 	}
 
 	return res, nil
+}
+
+func (a *AuthService) UserInfo(ctx context.Context, userID string) (*schema.UserInfo, error) {
+	u, err := a.AuthRepo.UserInfo(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	return &schema.UserInfo{
+		ID:       u.ID.String(),
+		Username: u.Username,
+		Status:   u.Status,
+	}, nil
 }

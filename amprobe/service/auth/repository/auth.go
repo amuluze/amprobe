@@ -23,6 +23,7 @@ var AuthRepoSet = wire.NewSet(NewAuthRepo, wire.Bind(new(IAuthRepository), new(*
 type IAuthRepository interface {
 	Login(ctx context.Context, args *schema.LoginArgs) (*model.User, error)
 	PassUpdate(ctx context.Context, args *schema.PasswordUpdateArgs) error
+	UserInfo(ctx context.Context, userID string) (*model.User, error)
 }
 
 type AuthRepo struct {
@@ -72,4 +73,12 @@ func (a *AuthRepo) PassUpdate(ctx context.Context, args *schema.PasswordUpdateAr
 		return err
 	}
 	return nil
+}
+
+func (a *AuthRepo) UserInfo(ctx context.Context, userID string) (*model.User, error) {
+	var user model.User
+	if err := a.DB.Model(&model.User{}).Where("id = ?", userID).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
