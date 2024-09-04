@@ -9,7 +9,7 @@ import (
 	"amprobe/pkg/rpc"
 	"context"
 	"time"
-	
+
 	"github.com/amuluze/docker"
 	"github.com/patrickmn/go-cache"
 )
@@ -21,13 +21,14 @@ type ITask interface {
 	ContainerSummary(context.Context, time.Time) error
 	ImageSummary(context.Context, time.Time) error
 	NetworkSummary(context.Context, time.Time) error
-	
+
 	HostSummary(context.Context, time.Time) error
 	CPUSummary(context.Context, time.Time) error
 	MemorySummary(context.Context, time.Time) error
 	DiskSummary(context.Context, time.Time) error
 	NetSummary(context.Context, time.Time) error
 }
+
 type Task struct {
 	interval  int
 	db        *database.DB
