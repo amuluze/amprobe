@@ -30,8 +30,13 @@ type Resource struct {
 }
 
 type UserQueryArgs struct {
-	Page int `json:"page" validate:"required"`
-	Size int `json:"size" validate:"required"`
+	ID        string   `json:"id"`
+	IDs       []string `json:"ids"`
+	Username  string   `json:"username"`
+	Usernames []string `json:"usernames"`
+	Status    int      `json:"status"`
+	Page      int      `json:"page" validate:"required"`
+	Size      int      `json:"size" validate:"required"`
 }
 
 type UserQueryReply struct {
@@ -43,13 +48,15 @@ type UserQueryReply struct {
 
 type UserCreateArgs struct {
 	Username string   `json:"username" validate:"required"`
-	Remark   *string  `json:"remark" validate:"required"`
+	Password string   `json:"password" validate:"required"`
+	Remark   string   `json:"remark"`
 	Status   int      `json:"status" validate:"required"`
 	IsAdmin  int      `json:"isAdmin" validate:"required"`
 	RoleIDs  []string `json:"role_ids" validate:"required"`
 }
 
 type UserUpdateArgs struct {
+	ID       string   `json:"id" validate:"required"`
 	Username *string  `json:"username"`
 	Remark   *string  `json:"remark"`
 	Status   *int     `json:"status"`

@@ -40,33 +40,129 @@ func (a *AccountAPI) UserQuery(ctx *fiber.Ctx) error {
 }
 
 func (a *AccountAPI) UserCreate(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	var args schema.UserCreateArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	err := a.AccountService.UserCreate(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
 	return fiberx.NoContent(ctx)
 }
 
 func (a *AccountAPI) UserUpdate(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	var args schema.UserUpdateArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	err := a.AccountService.UserUpdate(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
 	return fiberx.NoContent(ctx)
 }
 
 func (a *AccountAPI) UserDelete(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	var args schema.UserDeleteArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	err := a.AccountService.UserDelete(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
 	return fiberx.NoContent(ctx)
 }
 
 func (a *AccountAPI) RoleQuery(ctx *fiber.Ctx) error {
-	return fiberx.NoContent(ctx)
+	c := ctx.UserContext()
+	var args schema.RoleQueryArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	res, err := a.AccountService.RoleQuery(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	return fiberx.Success(ctx, res)
 }
 
 func (a *AccountAPI) RoleCreate(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	var args schema.RoleCreateArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	err := a.AccountService.RoleCreate(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
 	return fiberx.NoContent(ctx)
 }
 
 func (a *AccountAPI) RoleUpdate(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	var args schema.RoleUpdateArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	err := a.AccountService.RoleUpdate(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
 	return fiberx.NoContent(ctx)
 }
 
 func (a *AccountAPI) RoleDelete(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+	var args schema.RoleDeleteArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	err := a.AccountService.RoleDelete(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
 	return fiberx.NoContent(ctx)
 }
 
 func (a *AccountAPI) ResourceQuery(ctx *fiber.Ctx) error {
-	return fiberx.NoContent(ctx)
+	c := ctx.UserContext()
+	var args schema.ResourceQueryArgs
+	if err := ctx.BodyParser(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	res, err := a.AccountService.ResourceQuery(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	return fiberx.Success(ctx, res)
 }
