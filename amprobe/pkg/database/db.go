@@ -123,3 +123,7 @@ func (db *DB) RunInTransaction(fn func(tx *gorm.DB) error) error {
 func (db *DB) AutoMigrate(models ...interface{}) error {
 	return db.DB.AutoMigrate(models...)
 }
+
+func (db *DB) GetModel(model interface{}) *DB {
+	return &DB{db.DB.Model(model)}
+}

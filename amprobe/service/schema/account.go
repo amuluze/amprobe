@@ -30,11 +30,11 @@ type Resource struct {
 }
 
 type UserQueryArgs struct {
-	ID        string   `json:"id"`
-	IDs       []string `json:"ids"`
-	Username  string   `json:"username"`
-	Usernames []string `json:"usernames"`
-	Status    int      `json:"status"`
+	ID        string   `json:"id,omitempty"`
+	IDs       []string `json:"ids,omitempty"`
+	Username  string   `json:"username,omitempty"`
+	Usernames []string `json:"usernames,omitempty"`
+	Status    int      `json:"status,omitempty"`
 	Page      int      `json:"page" validate:"required"`
 	Size      int      `json:"size" validate:"required"`
 }
@@ -49,7 +49,7 @@ type UserQueryReply struct {
 type UserCreateArgs struct {
 	Username string   `json:"username" validate:"required"`
 	Password string   `json:"password" validate:"required"`
-	Remark   string   `json:"remark"`
+	Remark   string   `json:"remark,omitempty"`
 	Status   int      `json:"status" validate:"required"`
 	IsAdmin  int      `json:"isAdmin" validate:"required"`
 	RoleIDs  []string `json:"role_ids" validate:"required"`
@@ -57,21 +57,26 @@ type UserCreateArgs struct {
 
 type UserUpdateArgs struct {
 	ID       string   `json:"id" validate:"required"`
-	Username *string  `json:"username"`
-	Remark   *string  `json:"remark"`
-	Status   *int     `json:"status"`
-	IsAdmin  *int     `json:"isAdmin"`
-	RoleIDs  []string `json:"role_ids"`
+	Username string   `json:"username,omitempty"`
+	Remark   string   `json:"remark,omitempty"`
+	Status   int      `json:"status,omitempty"`
+	IsAdmin  int      `json:"isAdmin,omitempty"`
+	RoleIDs  []string `json:"role_ids,omitempty"`
 }
 
 type UserDeleteArgs struct {
-	ID  *string  `json:"id"`
-	IDs []string `json:"ids"`
+	ID  string   `json:"id,omitempty"`
+	IDs []string `json:"ids,omitempty"`
 }
 
 type RoleQueryArgs struct {
-	Page int `json:"page" validate:"required"`
-	Size int `json:"size" validate:"required"`
+	ID     string   `json:"id,omitempty"`
+	IDs    []string `json:"ids,omitempty"`
+	Name   string   `json:"name,omitempty"`
+	Names  []string `json:"names,omitempty"`
+	Status int      `json:"status,omitempty"`
+	Page   int      `json:"page" validate:"required"`
+	Size   int      `json:"size" validate:"required"`
 }
 
 type RoleQueryReply struct {
@@ -83,31 +88,29 @@ type RoleQueryReply struct {
 
 type RoleCreateArgs struct {
 	Name        string   `json:"name" validate:"required"`
-	Remark      string   `json:"remark"`
+	Remark      string   `json:"remark,omitempty"`
 	Status      int      `json:"status" validate:"required"`
-	ResourceIDs []string `json:"resource_ids"`
+	ResourceIDs []string `json:"resource_ids,omitempty"`
 }
 
 type RoleUpdateArgs struct {
-	Name        *string  `json:"name"`
-	Remark      *string  `json:"remark"`
-	Status      *int     `json:"status"`
-	ResourceIDs []string `json:"resource_ids"`
+	ID          string   `json:"id" validate:"required"`
+	Name        string   `json:"name,omitempty"`
+	Remark      string   `json:"remark,omitempty"`
+	Status      int      `json:"status,omitempty"`
+	ResourceIDs []string `json:"resource_ids,omitempty"`
 }
 
 type RoleDeleteArgs struct {
-	ID  *string  `json:"id"`
-	IDs []string `json:"ids"`
+	ID  string   `json:"id,omitempty"`
+	IDs []string `json:"ids,omitempty"`
 }
 
 type ResourceQueryArgs struct {
-	Page int `json:"page" validate:"required"`
-	Size int `json:"size" validate:"required"`
+	ID string `json:"id,omitempty"`
 }
 
 type ResourceQueryReply struct {
 	Data  []Resource `json:"data"`
 	Total int        `json:"total"`
-	Page  int        `json:"page"`
-	Size  int        `json:"size"`
 }
