@@ -6,7 +6,7 @@ package model
 
 import (
 	"time"
-	
+
 	"gorm.io/gorm"
 )
 
@@ -74,7 +74,6 @@ type Image struct {
 	Tag       string
 	Created   string
 	Size      string
-	Number    int
 }
 
 func (i *Image) TableName() string { return "s_image" }

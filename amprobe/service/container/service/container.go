@@ -110,13 +110,17 @@ func (a *ContainerService) ImageList(ctx context.Context, args schema.ImageQuery
 	}
 	var list []schema.Image
 	for _, item := range images {
+		num, err := a.ContainerRepo.ContainersByImage(ctx, fmt.Sprintf("%s:%s", item.Name, item.Tag))
+		if err != nil {
+			return schema.ImageQueryReply{}, err
+		}
 		list = append(list, schema.Image{
 			ID:      item.ImageID,
 			Name:    item.Name,
 			Tag:     item.Tag,
 			Created: item.Created,
 			Size:    item.Size,
-			Number:  item.Number,
+			Number:  num,
 		})
 	}
 	total, err := a.ContainerRepo.ImageCount(ctx)

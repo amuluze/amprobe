@@ -25,6 +25,7 @@ var _ IContainerRepo = (*ContainerRepo)(nil)
 type IContainerRepo interface {
 	Version(ctx context.Context) (model.Docker, error)
 	ContainerList(ctx context.Context, args schema.ContainerQueryArgs) (model.Containers, error)
+	ContainersByImage(ctx context.Context, image string) (int, error)
 	ContainerCount(ctx context.Context) (int, error)
 	ImageList(ctx context.Context, args schema.ImageQueryArgs) (model.Images, error)
 	ImageCount(ctx context.Context) (int, error)
@@ -73,6 +74,14 @@ func (a *ContainerRepo) ContainerList(ctx context.Context, args schema.Container
 		return containers, err
 	}
 	return containers, nil
+}
+
+func (a *ContainerRepo) ContainersByImage(ctx context.Context, image string) (int, error) {
+	var count int64
+	if err := a.DB.Model(&model.Container{}).Where("image = ?", image).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return int(count), nil
 }
 
 func (a *ContainerRepo) ContainerCount(ctx context.Context) (int, error) {

@@ -121,6 +121,50 @@ export const dynamicRoutes: RouteRecordRaw[] = [
         }
     },
     {
+        path: '/account',
+        name: 'account',
+        redirect: '/account/user',
+        meta: {
+            title: '用户',
+            icon: 'user',
+            show: true,
+            activeMenu: '/user'
+        }
+    },
+    {
+        path: '/account/user',
+        name: 'user',
+        component: () => import('@/views/account/user/index.vue'),
+        meta: {
+            title: '用户',
+            icon: 'user',
+            show: false,
+            activeMenu: '/account'
+        }
+    },
+    {
+        path: '/account/role',
+        name: 'role',
+        component: () => import('@/views/account/role/index.vue'),
+        meta: {
+            title: '角色',
+            icon: 'role',
+            show: false,
+            activeMenu: '/account'
+        }
+    },
+    {
+        path: '/account/api',
+        name: 'api',
+        component: () => import('@/views/account/api/index.vue'),
+        meta: {
+            title: 'api',
+            icon: 'api',
+            show: false,
+            activeMenu: '/account'
+        }
+    },
+    {
         path: '/audit',
         name: 'audit',
         component: () => import('@/views/audit/index.vue'), //路由懒加载
@@ -130,14 +174,4 @@ export const dynamicRoutes: RouteRecordRaw[] = [
             show: true
         }
     }
-    // {
-    //     path: '/system',
-    //     name: 'system',
-    //     component: () => import('@/views/system/index.vue'), //路由懒加载
-    //     meta: {
-    //         title: '系统',
-    //         icon: 'settings',
-    //         show: true
-    //     }
-    // }
 ]
