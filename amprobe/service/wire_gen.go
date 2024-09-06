@@ -74,7 +74,7 @@ func BuildInjector(configFile string, modelFile ModeConf) (*Injector, func(), er
 	auditService := service4.NewAuditService(auditRepo)
 	auditAPI := api4.NewAuditAPI(auditService)
 	accountRepository := repository5.NewAccountRepository(db)
-	accountService := service5.NewAccountService(accountRepository)
+	accountService := service5.NewAccountService(accountRepository, syncedEnforcer)
 	accountAPI := api5.NewAccountAPI(accountService)
 	loggerHandler := NewLoggerHandler()
 	termHandler := NewTermHandler()
