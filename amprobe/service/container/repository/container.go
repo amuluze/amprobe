@@ -5,13 +5,12 @@
 package repository
 
 import (
-	"context"
-	"log/slog"
-
 	"amprobe/pkg/database"
 	"amprobe/pkg/rpc"
 	"amprobe/service/model"
 	"amprobe/service/schema"
+	"context"
+	"gorm.io/gorm"
 
 	"github.com/google/wire"
 
@@ -138,7 +137,15 @@ func (a *ContainerRepo) ContainerUpdate(ctx context.Context, args rpcSchema.Cont
 
 func (a *ContainerRepo) ContainerDelete(ctx context.Context, args rpcSchema.ContainerDeleteArgs) (rpcSchema.ContainerDeleteReply, error) {
 	var reply rpcSchema.ContainerDeleteReply
-	err := a.RPCClient.Call(ctx, "ContainerDelete", args, &reply)
+	err := a.DB.RunInTransaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&model.Container{}).Where("id = ?", args.ContainerID).Delete(&model.Container{}).Error; err != nil {
+			return err
+		}
+		if err := a.RPCClient.Call(ctx, "ContainerDelete", args, &reply); err != nil {
+			return err
+		}
+		return nil
+	})
 	return reply, err
 }
 
@@ -174,7 +181,15 @@ func (a *ContainerRepo) ImageTag(ctx context.Context, args rpcSchema.ImageTagArg
 
 func (a *ContainerRepo) ImageDelete(ctx context.Context, args rpcSchema.ImageDeleteArgs) (rpcSchema.ImageDeleteReply, error) {
 	var reply rpcSchema.ImageDeleteReply
-	err := a.RPCClient.Call(ctx, "ImageDelete", args, &reply)
+	err := a.DB.RunInTransaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&model.Image{}).Where("id = ?", args.ImageID).Delete(&model.Image{}).Error; err != nil {
+			return err
+		}
+		if err := a.RPCClient.Call(ctx, "ImageDelete", args, &reply); err != nil {
+			return err
+		}
+		return nil
+	})
 	return reply, err
 }
 
@@ -202,15 +217,22 @@ func (a *ContainerRepo) NetworkCreate(ctx context.Context, args rpcSchema.Networ
 
 func (a *ContainerRepo) NetworkDelete(ctx context.Context, args rpcSchema.NetworkDeleteArgs) (rpcSchema.NetworkDeleteReply, error) {
 	var reply rpcSchema.NetworkDeleteReply
-	err := a.RPCClient.Call(ctx, "NetworkDelete", args, &reply)
+	err := a.DB.RunInTransaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&model.Network{}).Where("id = ?", args.NetworkID).Delete(&model.Network{}).Error; err != nil {
+			return err
+		}
+		if err := a.RPCClient.Call(ctx, "NetworkDelete", args, &reply); err != nil {
+			return err
+		}
+		return nil
+	})
+
 	return reply, err
 }
 
 func (a *ContainerRepo) GetDockerRegistryMirrors(ctx context.Context, args rpcSchema.GetDockerRegistryMirrorsArgs) (rpcSchema.GetDockerRegistryMirrorsReply, error) {
 	reply := rpcSchema.GetDockerRegistryMirrorsReply{Mirrors: []string{}}
-	slog.Info("===>", "args", args, "reply", reply, "client", a.RPCClient)
 	err := a.RPCClient.Call(ctx, "GetDockerRegistryMirrors", args, &reply)
-	slog.Info("===>", "reply", reply, "error", err)
 	return reply, err
 }
 
