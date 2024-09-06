@@ -99,7 +99,7 @@ func (a *Task) ImageSummary(ctx context.Context, timestamp time.Time) error {
 	for _, image := range reply.Data {
 		images = append(images, model.Image{
 			Timestamp: timestamp,
-			ImageID:   image.ImageID[:6],
+			ImageID:   image.ImageID[7:19],
 			Name:      image.Name,
 			Tag:       image.Tag,
 			Created:   image.Created,
