@@ -59,7 +59,7 @@ func TestFileDelete(t *testing.T) {
 	var reply rpc.FileDeleteReply
 	err = service.FileDelete(context.Background(), args, &reply)
 	if err != nil {
-		t.Errorf("file delete error: %#v", err)
+		t.Fatalf("file delete error: %#v", err)
 	}
 	t.Log("delete successful")
 }
