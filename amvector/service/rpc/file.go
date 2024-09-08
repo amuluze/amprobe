@@ -69,13 +69,10 @@ func (s *Service) FolderCreate(ctx context.Context, args rpc.FolderCreateArgs, r
 }
 
 func (s *Service) FileDelete(ctx context.Context, args rpc.FileDeleteArgs, reply *rpc.FileDeleteReply) error {
-	if info, err := os.Stat(args.Filepath); err != nil {
+	if _, err := os.Stat(args.Filepath); err != nil {
 		return err
-	} else if info.IsDir() {
-		return os.RemoveAll(args.Filepath)
-	} else {
-		return os.Remove(args.Filepath)
 	}
+	return os.RemoveAll(args.Filepath)
 }
 
 func (s *Service) FileUpload(ctx context.Context, args rpc.FileUploadArgs, reply *rpc.FileUploadReply) error {

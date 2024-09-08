@@ -6,10 +6,13 @@ package rpc
 
 import (
 	"common/rpc"
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/amuluze/docker"
 )
 
 func DirSize(path string) (int64, error) {
@@ -27,7 +30,7 @@ func DirSize(path string) (int64, error) {
 }
 
 func TestFilesSearch(t *testing.T) {
-	
+
 	args := &rpc.FilesSearchArgs{
 		Path: "/Users/amu",
 	}
@@ -42,4 +45,21 @@ func TestFilesSearch(t *testing.T) {
 			fmt.Println(size)
 		}
 	}
+}
+
+func TestFileDelete(t *testing.T) {
+	manager, err := docker.NewManager()
+	if err != nil {
+		t.Fatalf("new manager error: %#v", err)
+	}
+	service := NewService(manager)
+	args := rpc.FileDeleteArgs{
+		Filepath: "/wget-log.3",
+	}
+	var reply rpc.FileDeleteReply
+	err = service.FileDelete(context.Background(), args, &reply)
+	if err != nil {
+		t.Errorf("file delete error: %#v", err)
+	}
+	t.Log("delete successful")
 }
