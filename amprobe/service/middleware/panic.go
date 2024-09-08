@@ -21,8 +21,8 @@ func PanicMiddleware() fiber.Handler {
 		defer func() {
 			if r := recover(); r != nil {
 				buf := make([]byte, defaultStackTraceBufSize)
+				buf = buf[:runtime.Stack(buf, true)]
 
-				buf = buf[:runtime.Stack(buf, false)]
 				data := fmt.Sprintf("panic: %v\n%s\n", r, buf)
 				slog.Error("panic", "panic", slog.String("data", data))
 				_ = fiberx.Failure(ctx, errors.New500Error(data))

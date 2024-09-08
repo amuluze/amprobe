@@ -202,12 +202,10 @@ func (a *HostAPI) FileDelete(ctx *fiber.Ctx) error {
 	if err := fiberx.ParseBody(ctx, &args); err != nil {
 		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
-	slog.Info("file delete", "args", args)
 	if err := validatex.ValidateStruct(args); err != nil {
 		slog.Error("file delete error", "err", err)
 		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
 	}
-	slog.Info("file delete", "args", args)
 	err := a.HostService.FileDelete(c, args)
 	if err != nil {
 		slog.Error("file delete error", "err", err)
