@@ -5,10 +5,9 @@
 package fiberx
 
 import (
-	"log/slog"
 	"net/http"
 	"strings"
-	
+
 	"amprobe/pkg/errors"
 	"github.com/gofiber/fiber/v2"
 )
@@ -36,14 +35,6 @@ type FailedResponse struct {
 
 // Failure response.status = 400
 func Failure(c *fiber.Ctx, err errors.Error) error {
-	// 正常来说api层返回给接口层的错误信息不用打印，在这里会进行统一打印，400-500之间会打印warn 日志
-	// 500 会打印error 日志
-	if status := err.Status; status >= 400 && status < 500 {
-		slog.Warn("return 4xx error", "error", err)
-	} else if status >= 500 {
-		slog.Error("return 5xx error", "error", err)
-	}
-	
 	return ReturnJson(c, err.Status, &FailedResponse{Err: err.Err, Msg: err.Msg})
 }
 

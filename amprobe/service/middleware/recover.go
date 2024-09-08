@@ -21,7 +21,7 @@ func StackTraceHandler(c *fiber.Ctx, e interface{}) {
 	buf := make([]byte, defaultStackTraceBufLen)
 	slog.Error("e", "err", e)
 	buf = buf[:runtime.Stack(buf, false)]
-	slog.Error("recorver stack trace", "buf", string(buf), "err", e)
+	slog.Error("recover stack trace", "buf", string(buf), "err", e)
 	data, _ := json.Marshal(errors.ErrInternalServer)
 	_, _ = c.Write(data)
 }

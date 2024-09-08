@@ -28,7 +28,7 @@ func NewFiberApp(config *Config, r IRouter) *fiber.App {
 	app.Use(compress.New())
 	app.Use(pprof.New())
 	app.Use(middleware.PanicMiddleware())
-	app.Use(middleware.StackMiddleware)
+	//app.Use(middleware.StackMiddleware)
 
 	err := r.Register(app)
 	if err != nil {
