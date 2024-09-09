@@ -122,7 +122,7 @@ class Request {
                             })
                         this.requestQueue = []
                         this.isRefreshing = false
-                        window.location.href = '/login'
+                        window.location.href = '/app/login'
                     } else {
                         // 正在刷新 token，将当前请求加入队列，等待刷新完成后再重新发送
                         return new Promise((resolve) => {

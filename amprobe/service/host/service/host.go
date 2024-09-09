@@ -233,15 +233,15 @@ func (h *HostService) FileDownload(ctx context.Context, args schema.FileDownload
 }
 
 func (h *HostService) FileDelete(ctx context.Context, args schema.FileDeleteArgs) error {
-	return h.FileDelete(ctx, args)
+	return h.HostRepo.FileDelete(ctx, args)
 }
 
 func (h *HostService) FileCreate(ctx context.Context, args schema.FileCreateArgs) error {
-	return h.FileCreate(ctx, args)
+	return h.HostRepo.FileCreate(ctx, args)
 }
 
 func (h *HostService) FolderCreate(ctx context.Context, args schema.FolderCreateArgs) error {
-	return h.FolderCreate(ctx, args)
+	return h.HostRepo.FolderCreate(ctx, args)
 }
 
 func (h *HostService) GetDNSSettings(ctx context.Context, args schema.GetDNSSettingsArgs) (schema.GetDNSSettingsReply, error) {
