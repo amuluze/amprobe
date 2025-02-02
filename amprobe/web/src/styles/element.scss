@@ -1,0 +1,61 @@
+:root {
+    --el-menu-bg-color: #FFFEFB;
+    --el-color-primary: #D4EAF8;
+}
+
+/* el-drawer */
+.el-drawer {
+    .el-drawer__header {
+        padding: 16px 20px;
+        margin-bottom: 0;
+        border-bottom: 1px solid var(--el-border-color-lighter);
+
+        span {
+            font-size: 17px;
+            line-height: 17px;
+            color: var(--el-text-color-primary) !important;
+        }
+    }
+
+    .el-drawer__footer {
+        border-top: 1px solid var(--el-border-color-lighter);
+    }
+}
+
+/* el-dialog */
+.el-dialog {
+    padding: 0;
+
+    .el-dialog__header {
+        padding: 15px 20px;
+        margin: 0;
+        border-bottom: 1px solid var(--el-border-color-lighter);
+
+        .el-dialog__title {
+            font-size: 17px;
+        }
+    }
+
+    .el-dialog__body,
+    .el-dialog__footer {
+        padding: 15px 20px;
+    }
+}
+
+/*  el-select */
+.el-select {
+    width: 100%;
+}
+
+/* el-card */
+.el-card {
+    height: 100%;
+    color: var(--el-menu-text-color) !important;
+    background-color: var(--el-menu-bg-color) !important;
+
+    :deep(.el-card__body) {
+        display: flex;
+        flex-direction: column;
+        height: 100% !important;
+    }
+}
