@@ -50,7 +50,7 @@
 
 ## 请作者喝杯咖啡
 
-非常感谢大家使用 Amprobe, 目前该项目由个人用业余时间在维护，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
+非常感谢大家使用 `Amprobe`, 目前该项目由个人用业余时间在维护，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
 
 <img src="https://cdn.jsdelivr.net/gh/amuluze/picgo@main/amprobe/202403171446310.jpg" alt="阿慕"  width="300" height="300" />
 
