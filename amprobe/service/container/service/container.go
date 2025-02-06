@@ -26,6 +26,7 @@ type IContainerService interface {
 	Version(ctx context.Context) (schema.Docker, error)
 
 	ContainerList(ctx context.Context, args schema.ContainerQueryArgs) (schema.ContainerQueryRely, error)
+	Usage(ctx context.Context, args schema.ContainerUsageArgs) (schema.ContainerUsageReply, error)
 	ContainerCreate(ctx context.Context, args schema.ContainerCreateArgs) (schema.ContainerCreateReply, error)
 	ContainerUpdate(ctx context.Context, args schema.ContainerUpdateArgs) (schema.ContainerUpdateReply, error)
 	ContainerStart(ctx context.Context, args schema.ContainerStartArgs) error
@@ -88,7 +89,7 @@ func (a *ContainerService) ContainerList(ctx context.Context, args schema.Contai
 	var list []schema.Container
 	for _, item := range rpcReply.Data {
 		list = append(list, schema.Container{
-			ID:            item.ContainerID[:6],
+			ID:            item.ContainerID,
 			Name:          item.Name,
 			Image:         item.Image,
 			State:         item.State,
@@ -108,6 +109,44 @@ func (a *ContainerService) ContainerList(ctx context.Context, args schema.Contai
 	reply.Total = countReply.Count
 	reply.Page = args.Page
 	reply.Size = args.Size
+	return reply, nil
+}
+
+func (a *ContainerService) Usage(ctx context.Context, args schema.ContainerUsageArgs) (schema.ContainerUsageReply, error) {
+	var reply schema.ContainerUsageReply
+	reply.Names = make([]string, 0)
+	reply.CPUUsage = make(map[string][]schema.Usage)
+	reply.MemUsage = make(map[string][]schema.Usage)
+	rpcReply, err := a.ContainerRepo.Usage(ctx, rpcSchema.ContainerUsageArgs{
+		StartTime: args.StartTime,
+		EndTime:   args.EndTime,
+	})
+	if err != nil {
+		return reply, err
+	}
+	reply.Names = rpcReply.Names
+	for key, value := range rpcReply.CPUUsage {
+		if _, ok := reply.CPUUsage[key]; !ok {
+			reply.CPUUsage[key] = make([]schema.Usage, 0)
+		}
+		for _, item := range value {
+			reply.CPUUsage[key] = append(reply.CPUUsage[key], schema.Usage{
+				Timestamp: item.Timestamp,
+				Value:     item.Value,
+			})
+		}
+	}
+	for key, value := range rpcReply.MemUsage {
+		if _, ok := reply.MemUsage[key]; !ok {
+			reply.MemUsage[key] = make([]schema.Usage, 0)
+		}
+		for _, item := range value {
+			reply.MemUsage[key] = append(reply.MemUsage[key], schema.Usage{
+				Timestamp: item.Timestamp,
+				Value:     item.Value,
+			})
+		}
+	}
 	return reply, nil
 }
 

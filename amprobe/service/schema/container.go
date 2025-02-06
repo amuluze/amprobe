@@ -225,3 +225,14 @@ type SetDockerRegistryMirrorsArgs struct {
 }
 
 type SetDockerRegistryMirrorsReply struct{}
+
+type ContainerUsageArgs struct {
+	StartTime int64 `query:"start_time"`
+	EndTime   int64 `query:"end_time"`
+}
+
+type ContainerUsageReply struct {
+	Names    []string           `json:"names"`
+	CPUUsage map[string][]Usage `json:"cpu_usage"`
+	MemUsage map[string][]Usage `json:"mem_usage"`
+}

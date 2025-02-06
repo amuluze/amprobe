@@ -123,6 +123,7 @@ func (a *Router) RegisterAPI(app *fiber.App) {
 			{
 				gContainer.Get("/version", a.containerAPI.Version).Name("获取 Docker 版本信息")
 				gContainer.Get("/containers", a.containerAPI.ContainerList).Name("获取容器列表")
+				gContainer.Get("/usage", a.containerAPI.Usage).Name("获取容器资源使用情况")
 				gContainer.Post("/container_create", a.containerAPI.ContainerCreate).Name("创建容器")
 				gContainer.Post("/container_start", a.containerAPI.ContainerStart).Name("启动容器")
 				gContainer.Post("/container_stop", a.containerAPI.ContainerStop).Name("停止容器")

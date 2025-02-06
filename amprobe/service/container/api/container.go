@@ -51,6 +51,24 @@ func (a *ContainerAPI) ContainerCreate(ctx *fiber.Ctx) error {
 	return fiberx.Success(ctx, container)
 }
 
+func (a *ContainerAPI) Usage(ctx *fiber.Ctx) error {
+	c := ctx.UserContext()
+
+	var args schema.ContainerUsageArgs
+	if err := fiberx.ParseQuery(ctx, &args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+
+	if err := validatex.ValidateStruct(&args); err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	usage, err := a.ContainerService.Usage(c, args)
+	if err != nil {
+		return fiberx.Failure(ctx, errors.New400Error(err.Error()))
+	}
+	return fiberx.Success(ctx, usage)
+}
+
 func (a *ContainerAPI) ContainerList(ctx *fiber.Ctx) error {
 	c := ctx.UserContext()
 

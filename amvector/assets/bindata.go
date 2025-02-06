@@ -93,7 +93,7 @@ func assetsResourcesAmprobeConfigsConfigToml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/resources/amprobe/configs/config.toml", size: 1735, mode: os.FileMode(420), modTime: time.Unix(1737259535, 0)}
+	info := bindataFileInfo{name: "assets/resources/amprobe/configs/config.toml", size: 1735, mode: os.FileMode(420), modTime: time.Unix(1738813807, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

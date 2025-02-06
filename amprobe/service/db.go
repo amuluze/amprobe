@@ -32,6 +32,9 @@ func NewDB(config *Config, models *model.Models) (*database.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	// SQLite 启用WAL模式
+	db.Exec("PRAGMA journal_mode=WAL;")
+
 	if gormConfig.EnableAutoMigrate {
 		if dbType := gormConfig.DBType; strings.ToLower(dbType) == "mysql" {
 			db.Set("gorm:table_options", "ENGINE=InnoDB")

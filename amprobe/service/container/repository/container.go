@@ -21,6 +21,7 @@ type IContainerRepo interface {
 	Version(ctx context.Context, args rpcSchema.DockerArgs) (rpcSchema.DockerReply, error)
 
 	ContainerList(ctx context.Context, args rpcSchema.ContainerQueryArgs) (rpcSchema.ContainerQueryReply, error)
+	Usage(ctx context.Context, args rpcSchema.ContainerUsageArgs) (rpcSchema.ContainerUsageReply, error)
 	ContainersByImage(ctx context.Context, image string) (num int, err error)
 	ContainerCount(ctx context.Context, args rpcSchema.ContainerCountArgs) (rpcSchema.ContainerCountReply, error)
 	ContainerCreate(ctx context.Context, args rpcSchema.ContainerCreateArgs) (rpcSchema.ContainerCreateReply, error)
@@ -65,6 +66,12 @@ func (c *ContainerRepo) Version(ctx context.Context, args rpcSchema.DockerArgs) 
 func (c *ContainerRepo) ContainerList(ctx context.Context, args rpcSchema.ContainerQueryArgs) (rpcSchema.ContainerQueryReply, error) {
 	var reply rpcSchema.ContainerQueryReply
 	err := c.RPCClient.Call(ctx, "ContainerList", args, &reply)
+	return reply, err
+}
+
+func (c *ContainerRepo) Usage(ctx context.Context, args rpcSchema.ContainerUsageArgs) (rpcSchema.ContainerUsageReply, error) {
+	var reply rpcSchema.ContainerUsageReply
+	err := c.RPCClient.Call(ctx, "ContainerCPUUsage", args, &reply)
 	return reply, err
 }
 

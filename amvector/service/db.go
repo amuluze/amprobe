@@ -26,6 +26,9 @@ func NewDB(config *Config, models *model.Models) (*database.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	// 启用WAL模式
+	db.Exec("PRAGMA journal_mode=WAL;")
+
 	err = db.AutoMigrate(models.GetAllModels()...)
 	if err != nil {
 		return nil, err

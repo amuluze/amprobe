@@ -12,6 +12,7 @@ import (
 type IService interface {
 	Version(context.Context, schema.DockerArgs, *schema.DockerReply) error
 	ContainerList(context.Context, schema.ContainerQueryArgs, *schema.ContainerQueryReply) error
+	ContainerCPUUsage(context.Context, schema.ContainerUsageArgs, *schema.ContainerUsageReply) error
 	ContainersByImage(context.Context, schema.ContainersByImageArgs, *schema.ContainersByImageReply) error
 	ContainerCount(context.Context, schema.ContainerCountArgs, *schema.ContainerCountReply) error
 	ImageList(context.Context, schema.ImageQueryArgs, *schema.ImageQueryReply) error

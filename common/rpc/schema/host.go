@@ -141,3 +141,13 @@ type NetUsageArgs struct {
 type NetUsageReply struct {
 	Usage []NetUsage `json:"usage"`
 }
+
+type ContainerUsageArgs struct {
+	StartTime int64 `json:"start_time"`
+	EndTime   int64 `json:"end_time"`
+}
+type ContainerUsageReply struct {
+	Names    []string           `json:"names"`
+	CPUUsage map[string][]Usage `json:"cpu_usage"`
+	MemUsage map[string][]Usage `json:"mem_usage"`
+}

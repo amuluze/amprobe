@@ -8,12 +8,14 @@ import (
 	rpcSchema "common/rpc/schema"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"time"
 
 	"gorm.io/gorm"
 
 	"amvector/service/model"
+
 	"github.com/amuluze/docker"
 )
 
@@ -35,7 +37,7 @@ func (s *Service) Version(ctx context.Context, args rpcSchema.DockerArgs, reply 
 
 func (s *Service) ContainerList(ctx context.Context, args rpcSchema.ContainerQueryArgs, reply *rpcSchema.ContainerQueryReply) error {
 	var containers []model.Container
-	if err := s.DB.Model(&model.Container{}).Order("created_at desc").Offset((args.Page - 1) * args.Size).Limit(args.Size).Find(&containers).Error; err != nil {
+	if err := s.DB.Model(&model.Container{}).Order("created_at desc").Group("name").Offset((args.Page - 1) * args.Size).Limit(args.Size).Find(&containers).Error; err != nil {
 		return err
 	}
 	var results []rpcSchema.Container
@@ -60,6 +62,33 @@ func (s *Service) ContainerList(ctx context.Context, args rpcSchema.ContainerQue
 	return nil
 }
 
+func (s *Service) ContainerCPUUsage(ctx context.Context, args rpcSchema.ContainerUsageArgs, reply *rpcSchema.ContainerUsageReply) error {
+	var containers []model.Container
+	if err := s.DB.Model(&model.Container{}).Order("timestamp asc").Where("timestamp > ?", time.Unix(args.StartTime, 0)).Find(&containers).Error; err != nil {
+		return err
+	}
+	reply.Names = make([]string, 0)
+	reply.CPUUsage = make(map[string][]rpcSchema.Usage)
+	reply.MemUsage = make(map[string][]rpcSchema.Usage)
+	for _, item := range containers {
+		if _, ok := reply.CPUUsage[item.Name]; !ok {
+			reply.Names = append(reply.Names, item.Name)
+			reply.CPUUsage[item.Name] = make([]rpcSchema.Usage, 0)
+			reply.MemUsage[item.Name] = make([]rpcSchema.Usage, 0)
+		}
+
+		reply.CPUUsage[item.Name] = append(reply.CPUUsage[item.Name], rpcSchema.Usage{
+			Timestamp: item.Timestamp.Unix(),
+			Value:     item.CPUPercent,
+		})
+		reply.MemUsage[item.Name] = append(reply.MemUsage[item.Name], rpcSchema.Usage{
+			Timestamp: item.Timestamp.Unix(),
+			Value:     item.MemUsage,
+		})
+	}
+	return nil
+}
+
 func (s *Service) ContainersByImage(ctx context.Context, args rpcSchema.ContainersByImageArgs, reply *rpcSchema.ContainersByImageReply) error {
 	var count int64
 	if err := s.DB.Model(&model.Container{}).Where("image = ?", args.Image).Count(&count).Error; err != nil {
@@ -71,7 +100,7 @@ func (s *Service) ContainersByImage(ctx context.Context, args rpcSchema.Containe
 
 func (s *Service) ContainerCount(ctx context.Context, args rpcSchema.ContainerCountArgs, reply *rpcSchema.ContainerCountReply) error {
 	var count int64
-	if err := s.DB.Model(&model.Container{}).Count(&count).Error; err != nil {
+	if err := s.DB.Model(&model.Container{}).Group("name").Count(&count).Error; err != nil {
 		return err
 	}
 	reply.Count = int(count)
@@ -79,6 +108,13 @@ func (s *Service) ContainerCount(ctx context.Context, args rpcSchema.ContainerCo
 }
 
 func (s *Service) ContainerCreate(ctx context.Context, args rpcSchema.ContainerCreateArgs, reply *rpcSchema.ContainerCreateReply) error {
+	var count int64
+	if err := s.DB.Model(&model.Container{}).Where("name = ?", args.Name).Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		return fmt.Errorf("container %s already exists", args.Name)
+	}
 	var containerID string
 	var err error
 	if containerID, err = s.Manager.CreateContainer(
