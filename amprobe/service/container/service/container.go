@@ -95,6 +95,7 @@ func (a *ContainerService) ContainerList(ctx context.Context, args schema.Contai
 			State:         item.State,
 			Uptime:        item.Uptime,
 			IP:            item.IP,
+			Ports:         item.Ports,
 			CPUPercent:    fmt.Sprintf("%.2f", item.CPUPercent) + " %",
 			MemoryPercent: fmt.Sprintf("%.2f", item.MemPercent) + " %",
 			MemoryLimit:   utils.ConvertBytesToReadable(item.MemLimit),

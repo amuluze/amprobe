@@ -91,7 +91,7 @@ func (s *Service) ContainerCPUUsage(ctx context.Context, args rpcSchema.Containe
 
 func (s *Service) ContainersByImage(ctx context.Context, args rpcSchema.ContainersByImageArgs, reply *rpcSchema.ContainersByImageReply) error {
 	var count int64
-	if err := s.DB.Model(&model.Container{}).Where("image = ?", args.Image).Count(&count).Error; err != nil {
+	if err := s.DB.Model(&model.Container{}).Where("image = ?", args.Image).Group("name").Count(&count).Error; err != nil {
 		return err
 	}
 	reply.Num = int(count)
@@ -191,10 +191,10 @@ func (s *Service) containerTask() {
 
 func (s *Service) ContainerDelete(ctx context.Context, args rpcSchema.ContainerDeleteArgs, reply *rpcSchema.ContainerDeleteReply) error {
 	if err := s.DB.RunInTransaction(func(tx *gorm.DB) error {
-		if err := s.Manager.DeleteContainer(ctx, args.ContainerID); err != nil {
+		if err := tx.Model(&model.Container{}).Where("container_id = ?", args.ContainerID).Delete(&model.Container{}).Error; err != nil {
 			return err
 		}
-		if err := tx.Model(&model.Container{}).Where("container_id = ?", args.ContainerID).Delete(&model.Container{}).Error; err != nil {
+		if err := s.Manager.DeleteContainer(ctx, args.ContainerID); err != nil {
 			return err
 		}
 		return nil
