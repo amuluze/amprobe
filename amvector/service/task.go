@@ -81,8 +81,6 @@ func (a *TimedTask) Execute() {
 	if err := a.task.NetworkTask(timestamp); err != nil {
 		slog.Error("network summary failed", "error", err)
 	}
-
-	a.task.CleanTask()
 }
 
 func (a *TimedTask) Run() {

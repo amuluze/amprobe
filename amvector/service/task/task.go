@@ -32,7 +32,6 @@ type ITask interface {
 	MemoryTask(timestamp time.Time) error
 	DiskTask(timestamp time.Time) error
 	NetTask(timestamp time.Time) error
-	CleanTask()
 }
 
 type Task struct {

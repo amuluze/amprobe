@@ -76,10 +76,11 @@ func (a *Task) ContainerTask(timestamp time.Time) error {
 			MemLimit:    limit,
 		})
 	}
-	if err := a.db.Unscoped().Where("1 = 1").Delete(&model.Container{}).Error; err != nil {
+	if err := a.db.Model(&model.Container{}).Create(&containers).Error; err != nil {
 		return err
 	}
-	if err := a.db.Model(&model.Container{}).Create(&containers).Error; err != nil {
+	ts := time.Now().Add(-time.Duration(a.maxAge) * 24 * time.Hour).Unix()
+	if err := a.db.Unscoped().Where("timestamp < ?", ts).Delete(&model.Container{}).Error; err != nil {
 		return err
 	}
 	return nil
