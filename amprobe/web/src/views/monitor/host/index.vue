@@ -415,6 +415,10 @@ const { t } = useI18n()
   height: 48px;
   width: 100%;
 
+  span {
+    font-size: 14px;
+  }
+
   .el-card {
     height: 100%;
     :deep(.el-card__body) {
@@ -434,11 +438,12 @@ const { t } = useI18n()
 @include b(column) {
   height: 100%;
   width: 100%;
+  font-size: 14px;
   overflow-y: auto;
 }
 
 @include b(column-content) {
-  height: 320px;
+  height: 260px;
   width: 100%;
 }
 </style>

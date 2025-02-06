@@ -21,7 +21,7 @@ const { t } = useI18n()
                 v-loading="loading"
                 :data="tableData"
                 height="100%"
-                :header-cell-style="{ height: '45px', fontSize: '15px', color: '#000', background: '#fafafa' }"
+                :header-cell-style="{ height: '45px', fontSize: '14px', color: '#000', background: '#fafafa' }"
                 border
             >
                 <el-table-column prop="name" label="接口名称" min-width="100" />

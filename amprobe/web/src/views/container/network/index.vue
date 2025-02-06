@@ -45,7 +45,7 @@ const locale = computed(() => {
 <template>
     <div class="am-container">
         <div class="am-table-operator">
-            <el-button type="primary" plain @click="addNetwork({ title: 'network.newNetwork', update: search })">
+            <el-button type="primary" plain size="small" @click="addNetwork({ title: 'network.newNetwork', update: search })">
                 <svg-icon icon-class="add" />
                 {{ t('network.newNetwork') }}
             </el-button>
@@ -55,17 +55,17 @@ const locale = computed(() => {
                 ref="tableRef"
                 v-loading="loading"
                 :data="tableData as Network[]"
-                :header-cell-style="{ height: '45px', fontSize: '15px', color: '#000', background: '#fafafa' }"
+                :header-cell-style="{ height: '45px', fontSize: '14px', color: '#000', background: '#fafafa' }"
                 height="100%"
                 border
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" :selection="selectable" width="55" />
-                <el-table-column prop="name" :label="t('network.networkName')" align="center" width="140" fixed />
+                <el-table-column prop="name" :label="t('network.networkName')" align="center" min-width="140" fixed />
                 <el-table-column prop="driver" :label="t('network.networkMode')" align="center" min-width="120" />
-                <el-table-column prop="subnet" :label="t('network.subNetwork')" align="center" show-overflow-tooltip width="120" />
-                <el-table-column prop="gateway" :label="t('network.networkGateway')" align="center" show-overflow-tooltip width="160" />
-                <el-table-column prop="created" :label="t('network.createTime')" align="center" width="200" />
+                <el-table-column prop="subnet" :label="t('network.subNetwork')" align="center" show-overflow-tooltip min-width="120" />
+                <el-table-column prop="gateway" :label="t('network.networkGateway')" align="center" show-overflow-tooltip min-width="160" />
+                <el-table-column prop="created" :label="t('network.createTime')" align="center" min-width="200" />
                 <el-table-column :label="t('network.operator')" width="160" fixed="right" align="center">
                     <template #default="scope">
                         <el-button type="danger" plain size="small" @click="deleteNetwork({ title: 'network.deleteNetwork', id: scope.row.id, update: search })">

@@ -174,7 +174,7 @@ onMounted(async () => {
                     </p>
                 </el-skeleton>
             </content-wrap>
-            <content-wrap :style="{ height: '200px' }" :title="t('content.dockerInfo')" :message="t('content.dockerInfo')">
+            <content-wrap :style="{ 'margin-bottom': '8px', 'height': '200px' }" :title="t('content.dockerInfo')" :message="t('content.dockerInfo')">
                 <el-skeleton :loading="loading" animated>
                     <p>
                         {{ t('content.dockerVersion') }}：<el-tag>{{ dockerInfo?.docker_version }}</el-tag>
@@ -226,13 +226,12 @@ onMounted(async () => {
   justify-content: space-between;
 
   @include e(text) {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: normal;
   }
 
   @include e(number) {
-    font-size: 32px;
-    font-weight: bold;
+    font-size: 28px;
   }
 }
 
@@ -240,6 +239,7 @@ h4 {
   margin: 16px 0;
 }
 p {
-  margin: 4px;
+  font-size: 14px;
+  margin: 8px 0;
 }
 </style>

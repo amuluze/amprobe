@@ -14,12 +14,30 @@ export const dynamicRoutes: RouteRecordRaw[] = [
     {
         path: '/monitor',
         name: 'monitor',
-        component: async () => import('@/views/monitor/index.vue'),
+        redirect: '/monitor/host',
         meta: {
             title: 'menu.monitor',
             icon: 'menu-data',
             show: true,
         },
+        children: [
+            {
+                path: '/monitor/host',
+                name: 'hostMonitor',
+                component: async () => import('@/views/monitor/host/index.vue'),
+                meta: {
+                    title: 'menu.hostMonitor',
+                },
+            },
+            {
+                path: '/monitor/container',
+                name: 'containerMonitor',
+                component: async () => import('@/views/monitor/container/index.vue'),
+                meta: {
+                    title: 'menu.containerMonitor',
+                },
+            },
+        ],
     },
     {
         path: '/container',

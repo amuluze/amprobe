@@ -43,7 +43,7 @@ const { t } = useI18n()
 <template>
     <div class="am-container">
         <div class="am-table-operator">
-            <el-button type="primary" plain @click="addUser({ title: 'account.newAccount', update: search })">
+            <el-button type="primary" plain size="small" @click="addUser({ title: 'account.newAccount', update: search })">
                 <svg-icon icon-class="add" />
                 {{ t('account.newAccount') }}
             </el-button>
@@ -53,7 +53,7 @@ const { t } = useI18n()
                 ref="tableRef"
                 v-loading="loading"
                 :data="tableData as User[]"
-                :header-cell-style="{ height: '45px', fontSize: '15px', color: '#000', background: '#fafafa' }"
+                :header-cell-style="{ height: '45px', fontSize: '14px', color: '#000', background: '#fafafa' }"
                 height="100%"
                 border
                 @selection-change="handleSelectionChange"

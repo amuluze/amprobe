@@ -57,21 +57,20 @@ const { t } = useI18n()
 </script>
 
 <template>
-    <div style="margin-bottom: 8px">
+    <div class="am-system">
         <el-card shadow="never">
-            <el-button type="warning" plain @click="rebootHost">
+            <el-button type="warning" plain size="small" @click="rebootHost">
                 {{ t('setting.reboot') }}
             </el-button>
-            <el-button type="danger" plain @click="shutdownHost">
+            <el-button type="danger" plain size="small" @click="shutdownHost">
                 {{ t('setting.shutdown') }}
             </el-button>
         </el-card>
     </div>
-    <el-row :gutter="8">
+    <el-row :gutter="4">
         <el-col :span="12">
             <el-card shadow="never">
                 <h4>{{ t('setting.systemTimezone') }}</h4>
-                <el-divider />
                 <span>{{ t('setting.systemTimezone') }}：</span>
                 <span style="margin-right: 4px">
                     <el-tag>{{ systemTimezone }}</el-tag>
@@ -82,7 +81,6 @@ const { t } = useI18n()
         <el-col :span="12">
             <el-card shadow="never">
                 <h4>{{ t('setting.systemTime') }}</h4>
-                <el-divider />
                 <span>{{ t('setting.systemTime') }}：</span>
                 <span style="margin-right: 4px">
                     <el-tag>{{ systemTime }}</el-tag>
@@ -94,4 +92,20 @@ const { t } = useI18n()
 </template>
 
 <style scoped lang="scss">
+@include b(system) {
+  height: 48px;
+  width: 100%;
+  margin-bottom: 4px;
+  .el-card {
+    height: 100%;
+    :deep(.el-card__body) {
+      height: 100% !important;
+      padding: 0 8px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}
 </style>

@@ -28,7 +28,7 @@ export const cpuOption = {
                 color: '#045cc0',
                 insideColor: '#045cc0',
                 textStyle: {
-                    fontSize: '20px',
+                    fontSize: '24px',
                     fontWeight: 'bold',
                 },
             },
@@ -86,7 +86,7 @@ export const memOption = {
                 color: '#c06504',
                 insideColor: '#c06504',
                 textStyle: {
-                    fontSize: '20px',
+                    fontSize: '24px',
                     fontWeight: 'bold',
                 },
             },
@@ -144,7 +144,7 @@ export const diskOption = {
                 color: '#5f7906',
                 insideColor: '#5f7906',
                 textStyle: {
-                    fontSize: '20px',
+                    fontSize: '24px',
                     fontWeight: 'bold',
                 },
             },
@@ -228,7 +228,7 @@ export const cpuTrendingOption = {
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         },
     ],
-}
+} as EChartsOption
 
 export const memTrendingOption = {
     tooltip: {
@@ -279,7 +279,7 @@ export const memTrendingOption = {
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         },
     ],
-}
+} as EChartsOption
 
 export const diskTrendingOption = {
     tooltip: {
@@ -356,7 +356,7 @@ export const diskTrendingOption = {
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         },
     ],
-}
+} as EChartsOption
 
 export const netTrendingOption = {
     tooltip: {
@@ -433,4 +433,105 @@ export const netTrendingOption = {
             data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         },
     ],
-}
+} as EChartsOption
+
+export const containerCpuOption = {
+    title: {
+        text: 'CPU',
+        textStyle: {
+            fontSize: '15px',
+        },
+    },
+    tooltip: {
+        trigger: 'axis',
+        formatter(params: any) {
+            params = params[0]
+            return `${params.value}%`
+        },
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985',
+            },
+        },
+    },
+    legend: {
+        data: [],
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: [],
+    },
+    yAxis: {
+        type: 'value',
+    },
+    series: [],
+} as EChartsOption
+
+export const containerMemOption = {
+    title: {
+        text: '内存',
+        textStyle: {
+            fontSize: '15px',
+        },
+    },
+    tooltip: {
+        trigger: 'axis',
+        formatter(params: any): string {
+            let res = ''
+            params.forEach((item: any) => {
+                const units = ['B', 'KB', 'MB', 'GB']
+                let unitIndex = 0
+                while (item.value >= 1024 && unitIndex < units.length - 1) {
+                    item.value /= 1024
+                    unitIndex++
+                }
+                res += `${item.seriesName}: ${item.value.toFixed(2)} ${units[unitIndex]}<br/>`
+            })
+            return res
+        },
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985',
+            },
+        },
+    },
+    legend: {
+        data: [],
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: [],
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: {
+            show: true,
+            formatter: function yAxisLabelFormatter(value: number): string {
+                const units = ['B', 'KB', 'MB', 'GB']
+                let unitIndex = 0
+                while (value >= 1024 && unitIndex < units.length - 1) {
+                    value /= 1024
+                    unitIndex++
+                }
+                return `${value.toFixed(2)} ${units[unitIndex]}`
+            },
+        },
+    },
+    series: [],
+} as EChartsOption

@@ -19,6 +19,8 @@ export default {
     menu: {
         overview: 'Overview',
         monitor: 'Monitor',
+        hostMonitor: 'Host Monitor',
+        containerMonitor: 'Container Monitor',
         container: 'Container',
         containerManager: 'Container Manager',
         imageManager: 'Image Manager',

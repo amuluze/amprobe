@@ -1,3 +1,5 @@
+import type { Usage } from '@/interface/host.ts'
+
 /**
  * @Author     : Amu
  * @Date       : 2024/3/7 13:38
@@ -130,4 +132,15 @@ export interface GetDockerRegistryMirrorsResult {
 
 export interface SetDockerRegistryMirrorsArgs {
     registry_mirrors: string[]
+}
+
+export interface ContainerTrendingArgs {
+    start_time: number
+    end_time: number
+}
+
+export interface ContainerTrending {
+    names: string[]
+    cpu_usage: Map<string, Usage[]>
+    mem_usage: Map<string, Usage[]>
 }

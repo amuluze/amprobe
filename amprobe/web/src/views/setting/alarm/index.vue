@@ -139,4 +139,14 @@ const locale = store.app.language
 </template>
 
 <style scoped lang="scss">
+@include b(email) {
+  .el-descriptions {
+    :deep(.el-descriptions__title) {
+      font-size: 14px;
+    }
+    :deep(.el-descriptions__label) {
+      font-size: 14px;
+    }
+  }
+}
 </style>

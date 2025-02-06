@@ -29,8 +29,8 @@ defineProps<{
 <style scoped lang="scss">
 @include b(card) {
   @include e(title) {
-    font-size: 17px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 500;
     margin-right: 4px;
     color: var(--el-text-color-primary);
   }

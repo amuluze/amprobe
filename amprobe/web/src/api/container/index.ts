@@ -1,6 +1,8 @@
 import request from '@/api'
 import type {
     ContainerQueryResult,
+    ContainerTrending,
+    ContainerTrendingArgs,
     CreateContainerArgs,
     CreateContainerResult,
     GetDockerRegistryMirrorsResult,
@@ -23,6 +25,10 @@ import type { Pagination } from '@/interface/pagination'
 
 export async function queryContainers(params: Pagination) {
     return request.get<ContainerQueryResult>('/api/v1/container/containers', params)
+}
+
+export async function queryContainersUsage(param: ContainerTrendingArgs) {
+    return request.get<ContainerTrending>('/api/v1/container/usage', param)
 }
 
 export async function createContainer(params: CreateContainerArgs) {

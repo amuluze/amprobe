@@ -50,15 +50,15 @@ const locale = computed(() => {
     <div class="am-container">
         <div class="am-table-operator">
             <div class="am-table-operator__left">
-                <el-button type="primary" plain @click="pullImage({ title: 'image.pullImage', imageName: '', update: search })">
+                <el-button type="primary" plain size="small" @click="pullImage({ title: 'image.pullImage', imageName: '', update: search })">
                     <svg-icon icon-class="download" />
                     {{ t('image.pullImage') }}
                 </el-button>
-                <el-button type="primary" plain @click="importImage({ title: 'image.importImage', update: importImage })">
+                <el-button type="primary" plain size="small" @click="importImage({ title: 'image.importImage', update: importImage })">
                     <svg-icon icon-class="upload" />
                     {{ t('image.importImage') }}
                 </el-button>
-                <el-button type="warning" plain @click="pruneImage({ title: 'image.pruneImage', update: pruneImage })">
+                <el-button type="warning" plain size="small" @click="pruneImage({ title: 'image.pruneImage', update: pruneImage })">
                     <svg-icon icon-class="delete" />
                     {{ t('image.pruneImage') }}
                 </el-button>
@@ -69,17 +69,17 @@ const locale = computed(() => {
                 ref="tableRef"
                 v-loading="loading"
                 :data="tableData as Image[]"
-                :header-cell-style="{ height: '45px', fontSize: '15px', color: '#000', background: '#fafafa' }"
+                :header-cell-style="{ height: '45px', fontSize: '14px', color: '#000', background: '#fafafa' }"
                 height="100%"
                 border
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" :selection="selectable" width="55" />
-                <el-table-column prop="name" :label="t('image.imageName')" align="center" min-width="150" show-overflow-tooltip fixed sortable />
-                <el-table-column prop="number" :label="t('image.containerNum')" align="center" show-overflow-tooltip width="190" sortable />
-                <el-table-column prop="tag" :label="t('image.imageTag')" align="center" show-overflow-tooltip width="120" />
-                <el-table-column prop="created" :label="t('image.createTime')" align="center" width="180" />
-                <el-table-column prop="size" :label="t('image.imageSize')" align="center" width="120" />
+                <el-table-column prop="name" :label="t('image.imageName')" align="center" min-width="200" show-overflow-tooltip fixed sortable />
+                <el-table-column prop="number" :label="t('image.containerNum')" align="center" show-overflow-tooltip min-width="120" sortable />
+                <el-table-column prop="tag" :label="t('image.imageTag')" align="center" show-overflow-tooltip min-width="120" />
+                <el-table-column prop="created" :label="t('image.createTime')" align="center" min-width="180" />
+                <el-table-column prop="size" :label="t('image.imageSize')" align="center" min-width="120" />
                 <el-table-column :label="t('image.operator')" width="160" fixed="right" align="center">
                     <template #default="scope">
                         <el-button type="danger" plain size="small" @click="deleteImage({ title: 'image.deleteImage', id: scope.row.id, update: search })">

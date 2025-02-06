@@ -13,6 +13,7 @@ const { t } = useI18n()
         <p><svg-icon icon-class="done" /> {{ t('about.infoSecond') }}</p>
         <p><svg-icon icon-class="done" /> {{ t('about.infoThird') }}</p>
     </content-wrap>
+
     <content-wrap :title="t('about.projectInfo')" :message="t('about.projectInfo')">
         <el-descriptions :column="2" border>
             <el-descriptions-item :label="t('about.version')" label-align="left">
@@ -36,7 +37,4 @@ const { t } = useI18n()
 </template>
 
 <style lang="scss" scoped>
-@include b(content) {
-  margin-bottom: 8px;
-}
 </style>

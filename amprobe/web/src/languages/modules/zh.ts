@@ -19,6 +19,8 @@ export default {
     menu: {
         overview: '总览',
         monitor: '监控',
+        hostMonitor: '主机监控',
+        containerMonitor: '容器监控',
         container: '容器',
         containerManager: '容器管理',
         imageManager: '镜像管理',

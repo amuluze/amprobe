@@ -18,13 +18,13 @@ function handleClickMenu(item: RouteRecordRaw) {
     <template v-for="item in items" :key="item.name">
         <el-sub-menu v-if="item.children?.length" :index="item.path">
             <template #title>
-                <svg-icon v-if="item.meta && item.meta.icon" :icon-class="item.meta.icon as string" />
+                <svg-icon v-if="item.meta && item.meta.icon" :icon-class="item.meta.icon as string" size="1.2rem" />
                 <span class="am-sle">{{ t(item.meta?.title as string) }}</span>
             </template>
             <menuitem :items="item.children" />
         </el-sub-menu>
         <el-menu-item v-else :index="item.path" @click="handleClickMenu(item)">
-            <svg-icon v-if="item.meta && item.meta.icon" :icon-class="item.meta.icon as string" />
+            <svg-icon v-if="item.meta && item.meta.icon" :icon-class="item.meta.icon as string" size="1.2rem" />
             <template #title>
                 <span class="am-sle">{{ t(item.meta?.title as string) }}</span>
             </template>
