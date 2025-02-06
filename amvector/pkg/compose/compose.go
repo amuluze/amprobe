@@ -28,7 +28,7 @@ type DockerCompose struct {
 					MaxFile string `yaml:"max-file" default:"10"`
 				} `yaml:"options"`
 			} `yaml:"logging"`
-			Ports       []string `yaml:"ports" default:"[80:80,443:443]"`
+			Ports       []string `yaml:"ports" default:"[80:80]"`
 			Environment struct {
 				CreatedByProbe string `yaml:"CREATED_BY_PROBE" default:"true"`
 			} `yaml:"environment"`
