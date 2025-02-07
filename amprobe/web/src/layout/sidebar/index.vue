@@ -79,6 +79,7 @@ const menus = computed(() => {
   height: calc(100vh - 64px);
   .el-menu {
     border: none !important;
+    margin: 0 !important;
   }
 }
 
