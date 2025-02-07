@@ -49,7 +49,7 @@ const menus = computed(() => {
 
 <style scoped lang="scss">
 .el-aside {
-  background-color: '#fff';
+  background-color: #ffffff;
   //border-right: 1px solid var(--el-aside-border-color);
 }
 
@@ -85,7 +85,7 @@ const menus = computed(() => {
 @include b(collapse) {
   width: 12px;
   height: 32px;
-  background: '#fff';
+  background: #ffffff;
   border-radius: 0 5px 5px 0;
   display: flex;
   justify-content: center;

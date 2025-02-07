@@ -12,8 +12,8 @@ export const themeConfig: Record<Theme.ThemeType, { [ key: string ]: string }> =
         '--el-menu-hover-bg-color': '#71c4ef',
         '--el-menu-active-bg-color': '#409eff',
         '--el-menu-text-color': '#3b3c3d',
-        '--el-menu-active-color': '#00668c',
-        '--el-menu-hover-text-color': '#00668c',
+        '--el-menu-active-color': '#ffffff',
+        '--el-menu-hover-text-color': '#ffffff',
         '--el-menu-horizontal-sub-item-height': '50px',
         // 侧边栏样式
         '--el-aside-logo-text-color': '#303133',
