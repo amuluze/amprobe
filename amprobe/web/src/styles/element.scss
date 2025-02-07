@@ -59,3 +59,31 @@
         height: 100% !important;
     }
 }
+
+
+.el-menu {
+
+    .el-menu-item,
+    .el-sub-menu {
+        margin: 4px 12px;
+    }
+
+    .el-menu-item,
+    .el-sub-menu__title,
+    .el-sub-menu .el-menu-item {
+        transition: all 0.3s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+    }
+
+    .el-menu-item:hover,
+    .el-menu-item.is-active,
+    .el-sub-menu__title:hover,
+    .el-sub-menu .el-menu-item:hover,
+    .el-sub-menu .el-menu-item.is-active {
+        background: #409EFF;
+        color: #fff;
+        border-radius: 8px;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+}
