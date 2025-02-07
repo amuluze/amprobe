@@ -77,8 +77,13 @@ const menus = computed(() => {
 
 @include b(menu) {
   height: calc(100vh - 64px);
-  .el-menu {
+  :deep(.el-menu) {
     border: none !important;
+  }
+  :deep(.el-menu-item) {
+    margin: 0 !important;
+  }
+  :deep(.el-sub-menu) {
     margin: 0 !important;
   }
 }
