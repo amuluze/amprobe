@@ -36,12 +36,12 @@ function handleClickMenu(item: RouteRecordRaw) {
 .el-menu {
   &.el-menu--vertical {
     color: var(--el-menu-hover-text-color);
-    background-color: var(--el-menu-bg-color);
+    background-color: '#fff';
   }
 }
 
 .el-sub-menu {
-  background-color: var(--el-menu-bg-color);
+  background-color: '#fff';
   &:hover {
     color: var(--el-menu-hover-text-color);
   }
@@ -52,7 +52,7 @@ function handleClickMenu(item: RouteRecordRaw) {
 }
 
 .el-menu-item {
-  background-color: var(--el-menu-bg-color);
+  background-color: '#fff';
 
   &:hover {
     color: var(--el-menu-hover-text-color);

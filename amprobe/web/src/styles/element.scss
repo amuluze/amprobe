@@ -1,5 +1,5 @@
 :root {
-    --el-menu-bg-color: #FFFEFB;
+    // --el-menu-bg-color: #FFFEFB;
     --el-color-primary: #D4EAF8;
 }
 
@@ -51,7 +51,7 @@
 .el-card {
     height: 100%;
     color: var(--el-menu-text-color) !important;
-    background-color: var(--el-menu-bg-color) !important;
+    // background-color: var(--el-menu-bg-color) !important;
 
     :deep(.el-card__body) {
         display: flex;
@@ -62,6 +62,7 @@
 
 
 .el-menu {
+    background-color: '#fff';
 
     .el-menu-item,
     .el-sub-menu {
@@ -79,10 +80,9 @@
     .el-sub-menu__title:hover,
     .el-sub-menu .el-menu-item:hover,
     .el-sub-menu .el-menu-item.is-active {
-        background: #409EFF;
+        background: #9bd7fb;
         color: #fff;
         border-radius: 8px;
-        transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
         transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
     }
