@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import Content from '@/layout/content/index.vue';
 import Navbar from '@/layout/navbar/index.vue';
-import Sidebar from '@/layout/sidebar/index.vue'; /* PartiallyEnd: #3632/scriptSetup.vue */
-import Sidebar from '@/layout/sidebar/index.vue'
+import Sidebar from '@/layout/sidebar/index.vue';
 </script>
 
 <template>
@@ -41,7 +40,7 @@ import Sidebar from '@/layout/sidebar/index.vue'
   height: 100%;
   margin-left: 16px;
   border-radius: 4px;
-  background-color: var(--el-menu-bg-color);
+  background-color: var(--el-bg-color);
   overflow-y: scroll;
 }
 </style>

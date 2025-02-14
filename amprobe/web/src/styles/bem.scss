@@ -66,23 +66,23 @@ $modifier-sel: '--' !default;
     overflow: auto;
     margin: 8px 0;
     color: var(--el-menu-text-color);
-    // background-color: '#fff';
+    background-color: var(--el-menu-bg-color);
 
     .el-table {
-        // background-color: '#fff' !important;
+        background-color: var(--el-menu-bg-color);
         color: var(--el-menu-text-color);
         //
     }
 
     .el-table__header th {
-        // background-color: var(--el-menu-bg-color) !important;
+        background-color: var(--el-menu-bg-color) !important;
         color: var(--el-menu-text-color) !important;
     }
 
     .el-table__row {
-        // background-color: var(--el-menu-bg-color);
+        background-color: var(--el-menu-bg-color);
         color: var(--el-menu-text-color);
-        //border: 1px solid var(--el-header-border-color);
+        // border: 1px solid var(--el-header-border-color);
     }
 }
 

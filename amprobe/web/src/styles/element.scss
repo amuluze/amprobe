@@ -62,7 +62,7 @@
 
 
 .el-menu {
-    background-color: #ffffff !important;
+    background-color: var(--el-menu-bg-color) !important;
 
     .el-menu-item,
     .el-sub-menu {
@@ -86,8 +86,8 @@
         box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
         transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
     }
+}
 
-    .el-sub-menu.is-active {
-        background: none !important;
-    }
+el-table {
+    background-color: var(--el-menu-bg-color) !important;
 }

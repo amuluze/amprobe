@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Menuitem from '@/layout/sidebar/Menuitem.vue'
-import useStore from '@/store'
-import { dynamicRoutes } from '@/router/dynamic.ts'
 import CollapseIcon from '@/layout/sidebar/CollapseIcon.vue'
+import Menuitem from '@/layout/sidebar/Menuitem.vue'
+import { dynamicRoutes } from '@/router/dynamic.ts'
+import useStore from '@/store'
 
 const currentRoute = useRoute()
 const store = useStore()
@@ -49,7 +49,7 @@ const menus = computed(() => {
 
 <style scoped lang="scss">
 .el-aside {
-  background-color: #ffffff;
+  background-color: var(--el-menu-bg-color);
   //border-right: 1px solid var(--el-aside-border-color);
 }
 
@@ -91,7 +91,7 @@ const menus = computed(() => {
 @include b(collapse) {
   width: 12px;
   height: 32px;
-  background: #ffffff;
+  background: var(--el-menu-bg-color);
   border-radius: 0 5px 5px 0;
   display: flex;
   justify-content: center;
