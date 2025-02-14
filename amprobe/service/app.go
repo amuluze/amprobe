@@ -6,14 +6,14 @@ package service
 
 import (
 	"amprobe/service/middleware"
-	// "amprobe/web"
-	// "net/http"
+	"amprobe/web"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
-	// "github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 )
 
@@ -34,11 +34,11 @@ func NewFiberApp(config *Config, r IRouter) *fiber.App {
 	app.Use(middleware.PanicMiddleware())
 	app.Use(middleware.StackMiddleware)
 
-	// app.Use("/", filesystem.New(filesystem.Config{
-	// 	Root:       http.FS(web.FS),
-	// 	PathPrefix: "/dist",
-	// 	Browse:     true,
-	// }))
+	app.Use("/", filesystem.New(filesystem.Config{
+		Root:       http.FS(web.FS),
+		PathPrefix: "/dist",
+		Browse:     true,
+	}))
 
 	err := r.Register(app)
 	if err != nil {
