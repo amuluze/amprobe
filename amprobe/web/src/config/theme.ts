@@ -8,6 +8,7 @@
 export const themeConfig: Record<Theme.ThemeType, { [ key: string ]: string }> = {
     light: {
         // 菜单样式#f4f0f0
+        '--el-bg-color': '#f0f1f5',
         '--el-menu-bg-color': '#eff1f5',
         '--el-menu-hover-bg-color': '#71c4ef',
         '--el-menu-active-bg-color': '#409eff',
@@ -27,7 +28,8 @@ export const themeConfig: Record<Theme.ThemeType, { [ key: string ]: string }> =
     },
     dark: {
         // 菜单样式
-        '--el-menu-bg-color': '#141414',
+        '--el-bg-color': '#141414',
+        '--el-menu-bg-color': '#1d1e1f',
         '--el-menu-hover-bg-color': '#000000',
         '--el-menu-active-bg-color': '#000000',
         '--el-menu-text-color': '#dadada',

@@ -20,6 +20,6 @@
   box-sizing: border-box;
 
   color: var(--el-header-text-color);
-  background-color: var(--el-menu-bg-color);
+  background-color: var(--el-bg-color);
 }
 </style>

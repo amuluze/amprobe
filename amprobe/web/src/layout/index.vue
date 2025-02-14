@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import Content from '@/layout/content/index.vue'
-import Navbar from '@/layout/navbar/index.vue'
+import Content from '@/layout/content/index.vue';
+import Navbar from '@/layout/navbar/index.vue';
+import Sidebar from '@/layout/sidebar/index.vue'; /* PartiallyEnd: #3632/scriptSetup.vue */
 import Sidebar from '@/layout/sidebar/index.vue'
 </script>
 
@@ -20,7 +21,7 @@ import Sidebar from '@/layout/sidebar/index.vue'
 @include b(layout) {
   width: 100%;
   height: 100%;
-  background-color: var(--el-menu-bg-color);
+  background-color: var(--el-bg-color);
   overflow: hidden;
 }
 
@@ -30,7 +31,7 @@ import Sidebar from '@/layout/sidebar/index.vue'
   height: 100%;
   transition: 0.5s;
   border-right: var(--el-aside-border-color) 1px solid;
-  background-color: #ffffff;
+  background-color: var(--el-menu-bg-color);
 }
 
 @include b(layout-main) {
