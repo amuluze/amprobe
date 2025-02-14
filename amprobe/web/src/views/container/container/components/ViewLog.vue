@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { Websocket } from '@/components/Websocket'
-import { useI18n } from 'vue-i18n'
+import { Websocket } from '@/components/Websocket';
+import { AnsiUp } from 'ansi_up';
+import { useI18n } from 'vue-i18n';
+
+const ansi_up = new AnsiUp();
 
 const props = defineProps<{
   visible: boolean
@@ -44,7 +47,7 @@ function viewLog(container_id: string): void {
 
   const onMessage = (ws: Websocket, ev: MessageEvent) => {
     console.log(ws)
-    logData.value = `${logData.value}\n${ev.data}`
+    logData.value = `${logData.value}\n${ansi_up.ansi_to_html(ev.data)}`
   }
 
   ws = new Websocket(`ws/${container_id}`, onOpen, onMessage)
