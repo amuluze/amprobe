@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { Websocket } from '@/components/Websocket';
-import { AnsiUp } from 'ansi_up';
 import { useI18n } from 'vue-i18n';
 
-const ansi_up = new AnsiUp();
+import Codemirror from "codemirror-editor-vue3";
+import "codemirror/mode/javascript/javascript.js";
+
+const cmOptions = {
+  mode: "log",
+  theme: "default",
+
+}
 
 const props = defineProps<{
   visible: boolean
@@ -47,7 +53,7 @@ function viewLog(container_id: string): void {
 
   const onMessage = (ws: Websocket, ev: MessageEvent) => {
     console.log(ws)
-    logData.value = `${logData.value}\n${ansi_up.ansi_to_html(ev.data)}`
+    logData.value = `${logData.value}\n${ev.data}`
   }
 
   ws = new Websocket(`ws/${container_id}`, onOpen, onMessage)
@@ -85,7 +91,13 @@ const { t } = useI18n()
 <template>
     <!--  查看日志弹窗  -->
     <el-dialog v-model="dialogVisible" :title="t('container.log')" width="50%" :destroy-on-close="true">
-        <el-input v-model="logData" :rows="20" type="textarea" />
+        <Codemirror
+            v-model:value="logData"
+            :options="cmOptions"
+            border
+            height="100%"
+            width="100%"
+        />
         <template #footer>
             <div class="dialog-footer">
                 <el-button size="small" type="primary" plain @click="downloadLog">
