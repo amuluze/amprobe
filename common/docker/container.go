@@ -36,6 +36,7 @@ type ContainerSummary struct {
 	Ports        []string          `json:"ports"`
 	Volumes      []string          `json:"volumes"`
 	Environments []string          `json:"environments"`
+	Commands     []string          `json:"commands"`
 	Labels       map[string]string `json:"labels"`
 }
 
@@ -98,8 +99,10 @@ func (m *Manager) ListContainer(ctx context.Context) ([]ContainerSummary, error)
 		}
 
 		var environments []string
+		var commands []string
 		inspect, _ = m.client.ContainerInspect(ctx, c.ID)
 		environments = inspect.Config.Env
+		commands = inspect.Config.Cmd
 
 		cs := ContainerSummary{
 			ID:           c.ID,
@@ -113,6 +116,7 @@ func (m *Manager) ListContainer(ctx context.Context) ([]ContainerSummary, error)
 			Ports:        ports,
 			Volumes:      volumes,
 			Environments: environments,
+			Commands:     commands,
 			Labels:       c.Labels,
 		}
 		containerSummaryList = append(containerSummaryList, cs)

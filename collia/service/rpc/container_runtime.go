@@ -116,6 +116,10 @@ func recreateContainer(ctx context.Context, manager containerMutationManager, up
 	if environments == nil {
 		environments = old.Environments
 	}
+	commands := args.Commands
+	if commands == nil {
+		commands = old.Commands
+	}
 	labels := args.Labels
 	if labels == nil {
 		labels = old.Labels
@@ -135,7 +139,7 @@ func recreateContainer(ctx context.Context, manager containerMutationManager, up
 		return "", fmt.Errorf("rename original container: %w", err)
 	}
 
-	newID, err := manager.CreateContainer(ctx, name, image, network, ports, volumes, environments, args.Commands, labels)
+	newID, err := manager.CreateContainer(ctx, name, image, network, ports, volumes, environments, commands, labels)
 	if err != nil {
 		rollbackErr := rollbackContainer(ctx, manager, old, backupName, "", wasRunning)
 		return "", errors.Join(err, rollbackErr)
